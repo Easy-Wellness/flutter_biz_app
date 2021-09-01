@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Easy Wellness Biz</string>
+    <string name="facebook_app_id">310736773896408</string>
+    <string name="fb_login_protocol_scheme">fb310736773896408</string>
+</resources>
