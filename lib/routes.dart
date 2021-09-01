@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'screens/error/error_screen.dart';
-import 'screens/event_calendar_screen/event_calendar_screen.dart';
+import 'screens/event_calendar/event_calendar_screen.dart';
 import 'screens/loading/loading_screen.dart';
 import 'screens/login/login_screen.dart';
 
