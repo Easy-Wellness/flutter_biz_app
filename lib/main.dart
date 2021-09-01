@@ -1,10 +1,12 @@
-import 'package:easy_wellness_biz_app/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'login/login_screen.dart';
 import 'routes.dart';
+import 'screens/event_calendar_screen/event_calendar_screen.dart';
+import 'screens/loading/loading_screen.dart';
+import 'screens/login/login_screen.dart';
+import 'theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,13 +41,11 @@ class _AppState extends State<App> {
                   navigatorKey.currentState!
                       .pushReplacementNamed(LoginScreen.routeName);
                 else
-                  print('Logged-in successfully');
-                //   navigatorKey.currentState!
-                //       .pushReplacementNamed(ExploreScreen.routeName);
+                  navigatorKey.currentState!
+                      .pushReplacementNamed(EventCalendarScreen.routeName);
               });
             }
-
-            return const Center(child: CircularProgressIndicator.adaptive());
+            return LoadingScreen();
           }),
       routes: routes,
     );
