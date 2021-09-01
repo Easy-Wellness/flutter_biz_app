@@ -1,3 +1,4 @@
+import 'package:easy_wellness_biz_app/screens/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/error/error_screen.dart';
@@ -7,6 +8,7 @@ import 'screens/login/login_screen.dart';
 
 enum RootScreen {
   eventCalendarScreen,
+  settingsScreen,
 }
 
 final Map<String, WidgetBuilder> routes = {
@@ -16,4 +18,7 @@ final Map<String, WidgetBuilder> routes = {
 
   /// Sub-screens of the root Event Calendar Screen
   EventCalendarScreen.routeName: (_) => EventCalendarScreen(),
+
+  /// Sub-screens of the root Event Calendar Screen
+  SettingsScreen.routeName: (_) => SettingsScreen(),
 };

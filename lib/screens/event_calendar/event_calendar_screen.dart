@@ -1,3 +1,4 @@
+import 'package:easy_wellness_biz_app/widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class EventCalendarScreen extends StatelessWidget {
@@ -10,6 +11,7 @@ class EventCalendarScreen extends StatelessWidget {
         title: Text('Calendar'),
       ),
       body: Body(),
+      bottomNavigationBar: CustomBottomNavBar(),
     );
   }
 }
