@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:easy_wellness_biz_app/constants/env.dart';
 import 'package:easy_wellness_biz_app/models/location/gmp_nearby_place.model.dart';
-import 'package:easy_wellness_biz_app/utils/print_object.dart';
 import 'package:http/http.dart' as http;
 
 /// Each search can return as many as 60 results, split across three pages.
@@ -35,14 +34,14 @@ Future<List<GoogleMapsNearbyPlace>> findNearbyPlaces({
     final jsonMap = jsonDecode(response.body);
     final nextPageToken = jsonMap['next_page_token'] as String?;
     final parsed = (jsonMap['results'] as List).cast<Map<String, dynamic>>();
-    final currentPage = parsed.map<GoogleMapsNearbyPlace>((json) {
+    final List<GoogleMapsNearbyPlace> currentPage = [];
+    parsed.forEach((json) {
       final doc = GoogleMapsNearbyPlace.fromJson(json);
-      if (doc.plusCode == null) {
-        print('Nearby place from Google Maps with no plus code: ');
-        printObject(doc);
-      }
-      return doc;
-    }).toList();
+      if (doc.plusCode == null)
+        print('Exclude a place from Google Maps Platform with no plus code');
+      else
+        currentPage.add(doc);
+    });
     if (nextPageToken != null) {
       /// There is a delay between when a [next_page_token] is issued, and
       /// when it will become valid
