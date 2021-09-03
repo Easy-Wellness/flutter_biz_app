@@ -1,16 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'notifiers/business_place_id_notifier.dart';
 import 'routes.dart';
 import 'screens/event_calendar/event_calendar_screen.dart';
 import 'screens/loading/loading_screen.dart';
 import 'screens/login/login_screen.dart';
+import 'screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
 import 'theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(App());
+  runApp(ChangeNotifierProvider(
+    create: (_) => BusinessPlaceIdNotifier(),
+    child: App(),
+  ));
 }
 
 class App extends StatefulWidget {
@@ -27,7 +33,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
-      title: 'Easy Wellness',
+      title: 'Easy Wellness Biz',
       theme: theme(),
       home: FutureBuilder(
           future: initFirebaseSdk,
@@ -41,8 +47,13 @@ class _AppState extends State<App> {
                   navigatorKey.currentState!
                       .pushReplacementNamed(LoginScreen.routeName);
                 else
-                  navigatorKey.currentState!
-                      .pushReplacementNamed(EventCalendarScreen.routeName);
+                  Provider.of<BusinessPlaceIdNotifier>(context, listen: false)
+                              .businessPlaceId ==
+                          null
+                      ? navigatorKey.currentState!.pushReplacementNamed(
+                          SetPlaceIdAppStateScreen.routeName)
+                      : navigatorKey.currentState!
+                          .pushReplacementNamed(EventCalendarScreen.routeName);
               });
             }
             return LoadingScreen();
