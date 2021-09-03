@@ -70,7 +70,7 @@ class _BodyState extends State<Body> {
               onPressed: () => loginWithGoogle(),
               style: ElevatedButton.styleFrom(primary: Colors.white60),
               icon: SvgPicture.asset(
-                'assets/icons/google-icon.svg',
+                'assets/icons/google_icon.svg',
                 height: 24,
               ),
               label: Text(
@@ -82,7 +82,7 @@ class _BodyState extends State<Body> {
               onPressed: () => loginWithFacebook(context),
               style: ElevatedButton.styleFrom(primary: Colors.blue),
               icon: SvgPicture.asset(
-                'assets/icons/facebook-icon.svg',
+                'assets/icons/facebook_icon.svg',
                 height: 24,
                 color: Colors.white,
               ),
