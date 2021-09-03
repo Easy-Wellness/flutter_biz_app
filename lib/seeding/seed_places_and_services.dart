@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:http/http.dart' as http;
 import 'package:easy_wellness_biz_app/constants/specialties.dart';
@@ -20,7 +21,7 @@ Future<void> seedPlacesAndServices() async {
       longitude: place.geometry.location.lng,
     );
     final placeRef = db.collection('places').doc(place.placeId);
-    final servicesRef =
+    final servicesRef =  
         placeRef.collection('services').withConverter<DbNearbyService>(
               fromFirestore: (snapshot, _) =>
                   DbNearbyService.fromJson(snapshot.data()!),
@@ -35,6 +36,7 @@ Future<void> seedPlacesAndServices() async {
     await placeRef.set({
       'name': clinicName,
       'geo_position': location.data,
+      'owner_id': FirebaseAuth.instance.currentUser!.uid,
       'address': address,
       'status': place.businessStatus,
     });
