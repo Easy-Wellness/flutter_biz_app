@@ -31,16 +31,3 @@ Map<String, dynamic> _$DbNearbyServiceToJson(DbNearbyService instance) =>
       'place_id': instance.placeId,
       'place_name': instance.placeName,
     };
-
-GeoPosition _$GeoPositionFromJson(Map json) {
-  return GeoPosition(
-    geohash: json['geohash'] as String,
-    geopoint: GeoPosition._fromJsonGeoPoint(json['geopoint'] as GeoPoint),
-  );
-}
-
-Map<String, dynamic> _$GeoPositionToJson(GeoPosition instance) =>
-    <String, dynamic>{
-      'geohash': instance.geohash,
-      'geopoint': GeoPosition._toJsonGeoPoint(instance.geopoint),
-    };
