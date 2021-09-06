@@ -5,16 +5,17 @@ import 'package:provider/provider.dart';
 
 import 'notifiers/business_place_id_notifier.dart';
 import 'routes.dart';
-import 'screens/event_calendar/event_calendar_screen.dart';
 import 'screens/loading/loading_screen.dart';
 import 'screens/login/login_screen.dart';
 import 'screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
+import 'screens/settings/settings_screen.dart';
 import 'theme.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final businessPlaceIdNotifier = await BusinessPlaceIdNotifier().init();
   runApp(ChangeNotifierProvider(
-    create: (_) => BusinessPlaceIdNotifier(),
+    create: (_) => businessPlaceIdNotifier,
     child: App(),
   ));
 }
@@ -52,8 +53,12 @@ class _AppState extends State<App> {
                           null
                       ? navigatorKey.currentState!.pushReplacementNamed(
                           SetPlaceIdAppStateScreen.routeName)
-                      : navigatorKey.currentState!
-                          .pushReplacementNamed(EventCalendarScreen.routeName);
+                      : navigatorKey.currentState!.pushReplacementNamed(
+                          SettingsScreen.routeName,
+                          arguments: {
+                            'rootScreenIndex': RootScreen.settingsScreen.index
+                          },
+                        );
               });
             }
             return LoadingScreen();

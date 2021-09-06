@@ -6,8 +6,16 @@ const _prefKey = 'business_place_id';
 class BusinessPlaceIdNotifier with ChangeNotifier {
   String? _currentPlaceId;
 
-  BusinessPlaceIdNotifier() {
-    _loadPlaceIdFromDisk();
+  /// Because the constructor cannot be marked as [async] to [await] pending
+  /// operation, we block it forever. The consumers of this notifier use
+  /// the init() [async] function instead.
+  factory BusinessPlaceIdNotifier() => BusinessPlaceIdNotifier._internal();
+
+  BusinessPlaceIdNotifier._internal();
+
+  Future<BusinessPlaceIdNotifier> init() async {
+    await _loadPlaceIdFromDisk();
+    return this;
   }
 
   Future<void> _loadPlaceIdFromDisk() async {
@@ -25,8 +33,10 @@ class BusinessPlaceIdNotifier with ChangeNotifier {
 
   String? get businessPlaceId => _currentPlaceId;
 
-  set newBusinessPlaceId(String newPlaceId) {
+  set businessPlaceId(String? newPlaceId) {
     if (newPlaceId == _currentPlaceId) return;
+    if (newPlaceId == null)
+      throw ArgumentError('New business place id (app state) must not be null');
     _currentPlaceId = newPlaceId;
     notifyListeners();
     _persistPlaceIdToDisk();
