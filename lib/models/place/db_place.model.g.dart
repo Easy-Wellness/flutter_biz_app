@@ -13,14 +13,20 @@ DbPlace _$DbPlaceFromJson(Map json) {
     ownerId: json['owner_id'] as String,
     name: json['name'] as String,
     address: json['address'] as String,
+    phoneNumber: json['phone_number'] as String,
     status: json['status'] as String,
+    email: json['email'] as String,
+    website: json['website'] as String?,
   );
 }
 
 Map<String, dynamic> _$DbPlaceToJson(DbPlace instance) => <String, dynamic>{
       'geo_position': instance.geoPosition.toJson(),
       'owner_id': instance.ownerId,
+      'phone_number': instance.phoneNumber,
       'name': instance.name,
       'address': instance.address,
+      'email': instance.email,
+      'website': instance.website,
       'status': instance.status,
     };

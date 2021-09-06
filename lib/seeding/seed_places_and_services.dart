@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_wellness_biz_app/constants/specialties.dart';
+import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
+import 'package:easy_wellness_biz_app/models/nearby_service/db_nearby_service.model.dart';
+import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
+import 'package:easy_wellness_biz_app/services/gmp_service/find_nearby_places.service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:http/http.dart' as http;
-import 'package:easy_wellness_biz_app/constants/specialties.dart';
-import 'package:easy_wellness_biz_app/services/gmp_service/find_nearby_places.service.dart';
-import 'package:easy_wellness_biz_app/models/nearby_service/db_nearby_service.model.dart';
-import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
 
 Future<void> seedPlacesAndServices() async {
   final geo = Geoflutterfire();
@@ -34,13 +35,20 @@ Future<void> seedPlacesAndServices() async {
       geohash: location.data['geohash'],
       geopoint: location.data['geopoint'],
     );
-    await placeRef.set({
-      'name': clinicName,
-      'geo_position': location.data,
-      'owner_id': FirebaseAuth.instance.currentUser!.uid,
-      'address': address,
-      'status': place.businessStatus,
-    });
+    await placeRef
+        .withConverter<DbPlace>(
+          fromFirestore: (snapshot, _) => DbPlace.fromJson(snapshot.data()!),
+          toFirestore: (place, _) => place.toJson(),
+        )
+        .set(DbPlace(
+          name: clinicName,
+          geoPosition: geoPos,
+          ownerId: FirebaseAuth.instance.currentUser!.uid,
+          email: 'versatileclinic@clinic.biz.com',
+          phoneNumber: '(+84) 12 345 67 89',
+          address: address,
+          status: place.businessStatus.toLowerCase(),
+        ));
     await Future.wait(
       specialties.map(
         (specialty) => servicesRef.add(DbNearbyService(
