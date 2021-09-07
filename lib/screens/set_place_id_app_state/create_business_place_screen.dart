@@ -173,26 +173,31 @@ class _BodyState extends State<Body> {
                           geohash: point.data['geohash'],
                           geopoint: point.data['geopoint'],
                         );
-                        final docRef = await FirebaseFirestore.instance
+                        final docSnapshot = await FirebaseFirestore.instance
                             .collection('places')
+                            .doc(businessLocation!.placeId)
                             .withConverter<DbPlace>(
                               fromFirestore: (snapshot, _) =>
                                   DbPlace.fromJson(snapshot.data()!),
                               toFirestore: (place, _) => place.toJson(),
                             )
-                            .add(DbPlace(
-                              name: name,
-                              ownerId: FirebaseAuth.instance.currentUser!.uid,
-                              geoPosition: geoPos,
-                              email: email,
-                              phoneNumber: phoneNumber,
-                              address: businessLocation!.address,
-                              website: website,
-                              status: 'operational',
-                            ));
+                            .get();
+                        if (docSnapshot.exists)
+                          return showCustomSnackBar(context,
+                              'There is already a business place at the specified address in our platform');
+                        await docSnapshot.reference.set(DbPlace(
+                          name: name,
+                          ownerId: FirebaseAuth.instance.currentUser!.uid,
+                          geoPosition: geoPos,
+                          email: email,
+                          phoneNumber: phoneNumber,
+                          address: businessLocation!.address,
+                          website: website,
+                          status: 'operational',
+                        ));
                         Provider.of<BusinessPlaceIdNotifier>(context,
                                 listen: false)
-                            .businessPlaceId = docRef.id;
+                            .businessPlaceId = businessLocation!.placeId;
                         navigateToRootScreen(
                             context, RootScreen.settingsScreen);
                         showCustomSnackBar(context,
