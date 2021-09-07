@@ -1,5 +1,5 @@
 import 'package:easy_wellness_biz_app/models/location/gmp_place_autocomplete.model.dart';
-import 'package:easy_wellness_biz_app/services/gmp_service/find_geo_location_by_place_id.service.service.dart';
+import 'package:easy_wellness_biz_app/services/gmp_service/find_geo_location_by_place_id.service.dart';
 import 'package:easy_wellness_biz_app/services/gmp_service/predict_similar_places.service.dart';
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
