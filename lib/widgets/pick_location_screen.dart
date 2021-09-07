@@ -87,6 +87,7 @@ class _LocationSearchBarState extends State<LocationSearchBar> {
         elevation: 4.0,
         borderRadius: BorderRadius.circular(8),
         child: ListView.separated(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           shrinkWrap: true,
           padding: const EdgeInsets.symmetric(vertical: 8),
           itemCount: placePredictions.length,

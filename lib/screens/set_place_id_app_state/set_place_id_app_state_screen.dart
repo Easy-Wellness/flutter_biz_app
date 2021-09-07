@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import 'create_business_place_screen.dart';
+
 class SetPlaceIdAppStateScreen extends StatelessWidget {
   static const String routeName = '/set_place_id_app_state';
 
@@ -19,7 +21,8 @@ class SetPlaceIdAppStateScreen extends StatelessWidget {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(top: 8),
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(
+                context, CreateBusinessPlaceScreen.routeName),
             child: Icon(Icons.add),
           ),
         ),
@@ -118,8 +121,9 @@ class _SearchablePlaceListViewState extends State<SearchablePlaceListView> {
       elevation: 4,
       automaticallyImplyBackButton: false,
       automaticallyImplyDrawerHamburger: false,
-      clearQueryOnClose: true,
       textInputType: TextInputType.streetAddress,
+      transitionDuration: const Duration(seconds: 0),
+      implicitDuration: const Duration(seconds: 0),
       title: TextButton(
         onPressed: () => fsbController.open(),
         child: SizedBox(
@@ -154,43 +158,52 @@ class _SearchablePlaceListViewState extends State<SearchablePlaceListView> {
                   ))
               .toList());
       },
-      body: placesToShow!.isEmpty
-          ? const Center(child: Text('No results found 🥺'))
-          : Scrollbar(
-              child: ListView.separated(
-                padding: const EdgeInsets.only(top: 8),
-                itemCount: placesToShow!.length,
-                itemBuilder: (_, idx) {
-                  final place = placesToShow![idx].data();
-                  return ListTile(
-                    key: ValueKey<String>(placesToShow![idx].id),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                    leading: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      height: 30,
-                      width: 30,
-                      child: Center(
-                        child: Text(
-                          place.name.substring(0, 2).toUpperCase(),
-                          style: Theme.of(context).primaryTextTheme.caption,
+      body: widget.places.isEmpty
+          ? const Center(
+              child: Text(
+              "No business places, start creating one by clicking the ➕ icon",
+            ))
+          : placesToShow!.isEmpty
+              ? const Center(child: Text('No results found 🥺'))
+              : Scrollbar(
+                  child: ListView.separated(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    padding: const EdgeInsets.only(top: 8),
+                    itemCount: placesToShow!.length,
+                    itemBuilder: (_, idx) {
+                      final place = placesToShow![idx].data();
+                      return ListTile(
+                        key: ValueKey<String>(placesToShow![idx].id),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 8),
+                        leading: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          height: 30,
+                          width: 30,
+                          child: Center(
+                            child: Text(
+                              place.name.substring(0, 2).toUpperCase(),
+                              style: Theme.of(context).primaryTextTheme.caption,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    title: Text(place.name),
-                    subtitle: Text(place.address),
-                    trailing: OutlinedButton(
-                      onPressed: () {},
-                      child: Text('View'),
-                      style: OutlinedButton.styleFrom(primary: Colors.black54),
-                    ),
-                  );
-                },
-                separatorBuilder: (_, __) => Divider(thickness: 1),
-              ),
-            ),
+                        title: Text(place.name),
+                        subtitle: Text(place.address),
+                        trailing: OutlinedButton(
+                          onPressed: () {},
+                          child: const Text('View'),
+                          style:
+                              OutlinedButton.styleFrom(primary: Colors.black54),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (_, __) => const Divider(thickness: 1),
+                  ),
+                ),
     );
   }
 
