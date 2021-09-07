@@ -29,6 +29,7 @@ class DbNearbyService {
   @JsonKey(name: 'geo_position')
   final GeoPosition geoPosition;
 
+  /// A textual identifier that uniquely identifies a place on Google Maps
   @JsonKey(name: 'place_id', defaultValue: '')
   final String placeId;
 

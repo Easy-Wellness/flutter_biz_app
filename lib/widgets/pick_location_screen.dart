@@ -117,3 +117,20 @@ class _LocationSearchBarState extends State<LocationSearchBar> {
     super.dispose();
   }
 }
+
+/// A local geographic location that is constructed based on Google Maps
+/// Platform's response or the native Location API
+class GeoLocation {
+  const GeoLocation({
+    required this.placeId,
+    required this.latitule,
+    required this.longitude,
+    required this.address,
+  });
+
+  /// A textual identifier that uniquely identifies a place on Google Maps
+  final String placeId;
+  final double latitule;
+  final double longitude;
+  final String address;
+}

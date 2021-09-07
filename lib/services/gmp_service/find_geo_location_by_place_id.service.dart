@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:easy_wellness_biz_app/constants/env.dart';
-import 'package:easy_wellness_biz_app/models/location/geo_location.model.dart';
 import 'package:easy_wellness_biz_app/models/location/gmp_geocode_result.model.dart';
+import 'package:easy_wellness_biz_app/widgets/pick_location_screen.dart';
 import 'package:http/http.dart' as http;
 
 /// Find a place with a particular [placeId] on Google Maps and
@@ -23,6 +23,7 @@ Future<GeoLocation> findGeoLocationByPlaceId(String placeId) async {
         jsonDecode(response.body)['results'][0]);
     final geoCoords = parsed.geometry.location;
     return GeoLocation(
+      placeId: parsed.placeId,
       latitule: geoCoords.lat,
       longitude: geoCoords.lng,
       address: parsed.formattedAddress,
