@@ -25,7 +25,7 @@ class CreateBusinessPlaceScreen extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Business info'),
+          title: Text('Add new business'),
         ),
         body: Body(),
       ),
@@ -201,7 +201,7 @@ class _BodyState extends State<Body> {
                         navigateToRootScreen(
                             context, RootScreen.settingsScreen);
                         showCustomSnackBar(context,
-                            'Your new business place is successfully created');
+                            'Your new business place is successfully added');
                       } else
                         formValidationManager.erroredFields.first.focusNode
                             .requestFocus();

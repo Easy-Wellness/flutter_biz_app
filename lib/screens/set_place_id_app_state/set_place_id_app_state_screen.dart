@@ -20,6 +20,7 @@ class SetPlaceIdAppStateScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        appBar: AppBar(),
         body: SafeArea(child: Body()),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
         floatingActionButton: Padding(
@@ -27,7 +28,7 @@ class SetPlaceIdAppStateScreen extends StatelessWidget {
           child: FloatingActionButton(
             onPressed: () => Navigator.pushNamed(
                 context, CreateBusinessPlaceScreen.routeName),
-            child: Icon(Icons.add),
+            child: Icon(Icons.add_business_outlined),
           ),
         ),
       ),

@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
+import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
+import 'package:easy_wellness_biz_app/screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
 import 'package:easy_wellness_biz_app/widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const String routeName = '/settings';
@@ -9,28 +14,54 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
-      body: Body(),
-      bottomNavigationBar: CustomBottomNavBar(),
-    );
-  }
-}
-
-class Body extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      child: TextButtonTheme(
-        data: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            primary: Colors.black87,
-            alignment: Alignment.centerLeft,
+      body: Consumer<BusinessPlaceIdNotifier>(
+        builder: (_, notifier, child) => Container(
+          width: double.maxFinite,
+          child: TextButtonTheme(
+            data: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: Colors.black87,
+                alignment: Alignment.centerLeft,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ShortBusinessInfo(placeId: notifier.businessPlaceId!),
+                if (child != null) child,
+              ],
+            ),
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Divider(indent: 10, endIndent: 10, thickness: 1),
+            TextButton.icon(
+              onPressed: () {},
+              icon: Icon(Icons.store_outlined),
+              label: Text('Business information'),
+            ),
+            TextButton.icon(
+              onPressed: () {},
+              icon: Icon(Icons.book_online_outlined),
+              label: Text('Default booking policy'),
+            ),
+            TextButton.icon(
+              onPressed: () => Navigator.pushNamed(
+                  context, SetPlaceIdAppStateScreen.routeName),
+              icon: Icon(Icons.dvr_outlined),
+              label: Text('View your other business place'),
+            ),
+            const SizedBox(height: 40),
+            const Divider(indent: 10, endIndent: 10, thickness: 1),
+            TextButton.icon(
+              onPressed: () {},
+              icon: Icon(Icons.domain_disabled_outlined),
+              label: Text('Permanently delete this business place'),
+              style:
+                  TextButton.styleFrom(primary: Theme.of(context).errorColor),
+            ),
+            const Divider(indent: 10, endIndent: 10, thickness: 1),
             TextButton.icon(
               onPressed: () => FirebaseAuth.instance.signOut(),
               icon: Icon(Icons.logout_outlined),
@@ -40,6 +71,71 @@ class Body extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(),
+    );
+  }
+}
+
+class ShortBusinessInfo extends StatefulWidget {
+  const ShortBusinessInfo({Key? key, required this.placeId});
+
+  final String placeId;
+
+  @override
+  _ShortBusinessInfoState createState() => _ShortBusinessInfoState();
+}
+
+class _ShortBusinessInfoState extends State<ShortBusinessInfo> {
+  Future<DocumentSnapshot<DbPlace>>? querySnapshot;
+
+  @override
+  void initState() {
+    super.initState();
+    querySnapshot = FirebaseFirestore.instance
+        .collection('places')
+        .doc(widget.placeId)
+        .withConverter<DbPlace>(
+          fromFirestore: (snapshot, _) => DbPlace.fromJson(snapshot.data()!),
+          toFirestore: (place, _) => place.toJson(),
+        )
+        .get();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: FutureBuilder<DocumentSnapshot<DbPlace>>(
+        future: querySnapshot!,
+        builder: (_, snapshot) {
+          if (snapshot.hasError) return const Text('Something went wrong 😞');
+          if (!snapshot.hasData) return const LinearProgressIndicator();
+          final place = snapshot.data!.data()!;
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  place.name,
+                  style: Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                child: Text(
+                  place.address,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyText2,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )
+            ],
+          );
+        },
       ),
     );
   }
