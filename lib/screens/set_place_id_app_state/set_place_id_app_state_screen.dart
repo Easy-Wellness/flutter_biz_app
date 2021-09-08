@@ -50,6 +50,7 @@ class _BodyState extends State<Body> {
         'owner_id',
         isEqualTo: FirebaseAuth.instance.currentUser!.uid,
       )
+      .orderBy('name')
       .withConverter<DbPlace>(
         fromFirestore: (snapshot, _) => DbPlace.fromJson(snapshot.data()!),
         toFirestore: (place, _) => place.toJson(),
