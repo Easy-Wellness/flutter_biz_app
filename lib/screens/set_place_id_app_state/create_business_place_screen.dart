@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
-import 'package:easy_wellness_biz_app/routes.dart';
 import 'package:easy_wellness_biz_app/utils/form_validation_manager.dart';
 import 'package:easy_wellness_biz_app/utils/navigate_to_root_screen.dart';
 import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';

@@ -10,6 +10,7 @@ import 'screens/login/login_screen.dart';
 import 'screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
 import 'screens/settings/settings_screen.dart';
 import 'theme.dart';
+import 'utils/navigate_to_root_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

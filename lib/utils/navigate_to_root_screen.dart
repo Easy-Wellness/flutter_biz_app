@@ -1,7 +1,11 @@
-import 'package:easy_wellness_biz_app/routes.dart';
 import 'package:easy_wellness_biz_app/screens/event_calendar/event_calendar_screen.dart';
 import 'package:easy_wellness_biz_app/screens/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
+
+enum RootScreen {
+  eventCalendarScreen,
+  settingsScreen,
+}
 
 void navigateToRootScreen(BuildContext context, RootScreen screen) {
   /// Keep disposing screens until meeting the first screen

@@ -1,4 +1,3 @@
-import 'package:easy_wellness_biz_app/routes.dart';
 import 'package:easy_wellness_biz_app/utils/navigate_to_root_screen.dart';
 import 'package:flutter/material.dart';
 
