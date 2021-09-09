@@ -31,14 +31,17 @@ class BusinessPlaceIdNotifier with ChangeNotifier {
     prefs.setString(_prefKey, _currentPlaceId!);
   }
 
+  Future<void> _removePlaceIdFromDisk() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(_prefKey);
+  }
+
   String? get businessPlaceId => _currentPlaceId;
 
   set businessPlaceId(String? newPlaceId) {
     if (newPlaceId == _currentPlaceId) return;
-    if (newPlaceId == null)
-      throw ArgumentError('New business place id (app state) must not be null');
     _currentPlaceId = newPlaceId;
     notifyListeners();
-    _persistPlaceIdToDisk();
+    (newPlaceId == null) ? _removePlaceIdFromDisk() : _persistPlaceIdToDisk();
   }
 }

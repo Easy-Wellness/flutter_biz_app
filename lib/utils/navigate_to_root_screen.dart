@@ -1,10 +1,13 @@
 import 'package:easy_wellness_biz_app/screens/event_calendar/event_calendar_screen.dart';
+import 'package:easy_wellness_biz_app/screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
 import 'package:easy_wellness_biz_app/screens/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 enum RootScreen {
   eventCalendarScreen,
   settingsScreen,
+  // The screen below must be at the last index
+  setPlaceIdAppStateScreen,
 }
 
 void navigateToRootScreen(BuildContext context, RootScreen screen) {
@@ -33,5 +36,7 @@ Widget _getRootScreenWidget(RootScreen rootScreen) {
       return EventCalendarScreen();
     case RootScreen.settingsScreen:
       return SettingsScreen();
+    case RootScreen.setPlaceIdAppStateScreen:
+      return SetPlaceIdAppStateScreen();
   }
 }
