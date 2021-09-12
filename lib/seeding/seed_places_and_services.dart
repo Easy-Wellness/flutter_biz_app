@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_wellness_biz_app/constants/specialties.dart';
+import 'package:easy_wellness_biz_app/constants/misc.dart';
 import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
 import 'package:easy_wellness_biz_app/models/nearby_service/db_nearby_service.model.dart';
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
@@ -44,6 +44,7 @@ Future<void> seedPlacesAndServices() async {
           name: clinicName,
           geoPosition: geoPos,
           ownerId: FirebaseAuth.instance.currentUser!.uid,
+          workingHours: defaultWorkingHoursInSecs,
           email: 'versatileclinic@clinic.biz.com',
           phoneNumber: '(+84) 12 345 67 89',
           address: address,

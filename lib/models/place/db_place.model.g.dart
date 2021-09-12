@@ -16,6 +16,8 @@ DbPlace _$DbPlaceFromJson(Map json) {
     phoneNumber: json['phone_number'] as String,
     status: json['status'] as String,
     email: json['email'] as String,
+    workingHours: WorkingHours.fromJson(
+        Map<String, dynamic>.from(json['working_hours'] as Map)),
     website: json['website'] as String?,
   );
 }
@@ -24,6 +26,7 @@ Map<String, dynamic> _$DbPlaceToJson(DbPlace instance) => <String, dynamic>{
       'geo_position': instance.geoPosition.toJson(),
       'owner_id': instance.ownerId,
       'phone_number': instance.phoneNumber,
+      'working_hours': instance.workingHours.toJson(),
       'name': instance.name,
       'address': instance.address,
       'email': instance.email,

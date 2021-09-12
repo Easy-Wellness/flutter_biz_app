@@ -166,7 +166,8 @@ class _SearchablePlaceListViewState extends State<SearchablePlaceListView> {
       body: widget.places.isEmpty
           ? const Center(
               child: Text(
-              "No business places, start creating one by clicking the ➕ icon",
+              "You have no business places, start creating one by clicking the ➕ icon",
+              textAlign: TextAlign.center,
             ))
           : placesToShow!.isEmpty
               ? const Center(child: Text('No results found 🥺'))
