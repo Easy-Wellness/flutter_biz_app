@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
+import 'package:easy_wellness_biz_app/screens/settings/edit_business_info_screen.dart';
 import 'package:easy_wellness_biz_app/utils/navigate_to_root_screen.dart';
 import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';
 import 'package:easy_wellness_biz_app/widgets/custom_bottom_nav_bar.dart';
@@ -39,14 +40,15 @@ class SettingsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextButton.icon(
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(
+                  context, EditBusinessInfoScreen.routeName),
               icon: Icon(Icons.store_outlined),
               label: Text('Edit Business Info'),
             ),
             TextButton.icon(
               onPressed: () {},
               icon: Icon(Icons.book_online_outlined),
-              label: Text('Default booking policy'),
+              label: Text('Default scheduling policy'),
             ),
             TextButton.icon(
               onPressed: () => Navigator.pushNamed(
@@ -113,7 +115,7 @@ class SettingsScreen extends StatelessWidget {
 }
 
 class ShortBusinessInfo extends StatefulWidget {
-  const ShortBusinessInfo({Key? key, required this.placeId});
+  const ShortBusinessInfo({Key? key, required this.placeId}) : super(key: key);
 
   final String? placeId;
 
@@ -122,13 +124,13 @@ class ShortBusinessInfo extends StatefulWidget {
 }
 
 class _ShortBusinessInfoState extends State<ShortBusinessInfo> {
-  Future<DocumentSnapshot<DbPlace>>? querySnapshot;
+  Future<DocumentSnapshot<DbPlace>>? docSnapshot;
 
   @override
   void initState() {
     super.initState();
     if (widget.placeId == null) return;
-    querySnapshot = FirebaseFirestore.instance
+    docSnapshot = FirebaseFirestore.instance
         .collection('places')
         .doc(widget.placeId)
         .withConverter<DbPlace>(
@@ -142,7 +144,7 @@ class _ShortBusinessInfoState extends State<ShortBusinessInfo> {
   Widget build(BuildContext context) {
     return Center(
       child: FutureBuilder<DocumentSnapshot<DbPlace>>(
-        future: querySnapshot,
+        future: docSnapshot,
         builder: (_, snapshot) {
           if (snapshot.hasError) return const Text('Something went wrong 😞');
           if (!snapshot.hasData) return const LinearProgressIndicator();

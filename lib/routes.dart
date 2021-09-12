@@ -6,6 +6,7 @@ import 'screens/loading/loading_screen.dart';
 import 'screens/login/login_screen.dart';
 import 'screens/set_place_id_app_state/create_business_place_screen.dart';
 import 'screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
+import 'screens/settings/edit_business_info_screen.dart';
 import 'screens/settings/settings_screen.dart';
 import 'widgets/pick_location_screen.dart';
 
@@ -24,4 +25,5 @@ final Map<String, WidgetBuilder> routes = {
 
   /// Sub-screens of the root Event Calendar Screen
   SettingsScreen.routeName: (_) => SettingsScreen(),
+  EditBusinessInfoScreen.routeName: (_) => EditBusinessInfoScreen(),
 };
