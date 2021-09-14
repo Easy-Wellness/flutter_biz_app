@@ -4,7 +4,7 @@ part 'working_hours.model.g.dart';
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class WorkingHours {
-  WorkingHours({
+  const WorkingHours({
     required this.monday,
     required this.tuesday,
     required this.wednesday,
@@ -30,7 +30,7 @@ class WorkingHours {
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class TimeIntervalInSecs {
-  TimeIntervalInSecs({
+  const TimeIntervalInSecs({
     required this.start,
     required this.end,
   });

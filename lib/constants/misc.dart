@@ -11,22 +11,14 @@ const specialties = [
   'chiropractic',
 ];
 
-final defaultWorkingHoursInSecs = WorkingHours.fromJson({
-  'monday': [
-    {'start': 28800, 'end': 61200}
-  ],
-  'tuesday': [
-    {'start': 28800, 'end': 61200}
-  ],
-  'wednesday': [
-    {'start': 28800, 'end': 61200}
-  ],
-  'thursday': [
-    {'start': 28800, 'end': 61200}
-  ],
-  'friday': [
-    {'start': 28800, 'end': 61200}
-  ],
-  'saturday': [],
-  'sunday': []
-});
+const defaultWorkingHoursInSecs = WorkingHours(
+  monday: [defaultWorkingTimeInterval],
+  tuesday: [defaultWorkingTimeInterval],
+  wednesday: [defaultWorkingTimeInterval],
+  thursday: [defaultWorkingTimeInterval],
+  friday: [defaultWorkingTimeInterval],
+  saturday: [],
+  sunday: [],
+);
+
+const defaultWorkingTimeInterval = TimeIntervalInSecs(start: 28800, end: 61200);
