@@ -3,13 +3,12 @@ import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/models/working_hours/working_hours.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/utils/form_validation_manager.dart';
-import 'package:easy_wellness_biz_app/utils/seconds_to_friendly_time.dart';
 import 'package:easy_wellness_biz_app/widgets/basic_business_info_form_fields.dart';
 import 'package:easy_wellness_biz_app/widgets/pick_location_screen.dart';
+import 'package:easy_wellness_biz_app/widgets/working_hours_input/working_hours_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:recase/recase.dart';
 
 class EditBusinessInfoScreen extends StatelessWidget {
   const EditBusinessInfoScreen({Key? key}) : super(key: key);
@@ -51,6 +50,7 @@ class _BodyState extends State<Body> {
   GeoLocation? businessLocation;
   String phoneNumber = '';
   String email = '';
+  WorkingHours? workingHours;
   String? website;
 
   @override
@@ -107,60 +107,7 @@ class _BodyState extends State<Body> {
                         onEmailSaved: (value) => email = value!,
                         onWebsiteSaved: (value) => website = value,
                       ),
-                      Text('Working hours',
-                          style: TextStyle(color: Theme.of(context).hintColor)),
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  for (String dayOfWeek
-                                      in _workingHoursInSecs.toJson().keys)
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom: 8),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: 64,
-                                            child: Text(
-                                              dayOfWeek
-                                                  .substring(0, 3)
-                                                  .titleCase,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          _buildTimeRangeListItems(
-                                              context,
-                                              (_workingHoursInSecs
-                                                          .toJson()[dayOfWeek]
-                                                      as List)
-                                                  .map<TimeIntervalInSecs>(
-                                                      (interval) =>
-                                                          TimeIntervalInSecs
-                                                              .fromJson(
-                                                                  interval))
-                                                  .toList()),
-                                        ],
-                                      ),
-                                    )
-                                ],
-                              ),
-                            ),
-                            Icon(Icons.arrow_forward_ios,
-                                color: Theme.of(context).hintColor),
-                          ],
-                        ),
-                      ),
+                      WorkingHoursInput(initialValue: place.workingHours),
                       Container(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -224,45 +171,3 @@ class _BodyState extends State<Body> {
     );
   }
 }
-
-Widget _buildTimeRangeListItems(
-    BuildContext context, List<TimeIntervalInSecs> timeIntervalsInSecs) {
-  return timeIntervalsInSecs.isEmpty
-      ? Text(
-          'Closed',
-          style: TextStyle(color: Theme.of(context).hintColor),
-        )
-      : Column(
-          children: [
-            for (var interval in timeIntervalsInSecs)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text(
-                    '${secondsToFriendlyTime(interval.start)} - ${secondsToFriendlyTime(interval.end)}'),
-              ),
-          ],
-        );
-}
-
-final _workingHoursInSecs = WorkingHours.fromJson({
-  'monday': [
-    {'start': 28800, 'end': 61200},
-    {'start': 28800, 'end': 61200},
-    {'start': 28800, 'end': 61200},
-    {'start': 28800, 'end': 61200},
-  ],
-  'tuesday': [
-    {'start': 28800, 'end': 61200},
-  ],
-  'wednesday': [
-    {'start': 28800, 'end': 61200},
-  ],
-  'thursday': [
-    {'start': 28800, 'end': 61200},
-  ],
-  'friday': [
-    {'start': 28800, 'end': 61200},
-  ],
-  'saturday': [],
-  'sunday': []
-});
