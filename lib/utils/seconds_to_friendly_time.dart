@@ -4,7 +4,11 @@ String secondsToFriendlyTime(int seconds) {
   final duration = Duration(seconds: seconds);
   String twoDigits(int n) => n.toString().padLeft(2, '0');
 
-  final dayPeriod = duration.inHours < 12 ? 'AM' : 'PM';
+  final dayPeriod = (duration.inHours < 12)
+      ? 'AM'
+      : (duration.inHours == 24)
+          ? 'AM'
+          : 'PM';
   final twoDigitHours = twoDigits(
     duration.inHours >= 13
         ? duration.inHours - 12
