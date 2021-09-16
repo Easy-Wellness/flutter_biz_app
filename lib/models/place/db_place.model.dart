@@ -1,6 +1,6 @@
+import 'package:easy_wellness_biz_app/widgets/weekly_schedule_settings/weekly_schedule.model.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
-import 'package:easy_wellness_biz_app/models/working_hours/working_hours.model.dart';
 
 part 'db_place.model.g.dart';
 
@@ -28,7 +28,7 @@ class DbPlace {
   final String phoneNumber;
 
   @JsonKey(name: 'working_hours')
-  final WorkingHours workingHours;
+  final WeeklySchedule workingHours;
 
   final String name;
   final String address;

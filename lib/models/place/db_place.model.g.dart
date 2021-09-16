@@ -16,7 +16,7 @@ DbPlace _$DbPlaceFromJson(Map json) {
     phoneNumber: json['phone_number'] as String,
     status: json['status'] as String,
     email: json['email'] as String,
-    workingHours: WorkingHours.fromJson(
+    workingHours: WeeklySchedule.fromJson(
         Map<String, dynamic>.from(json['working_hours'] as Map)),
     website: json['website'] as String?,
   );

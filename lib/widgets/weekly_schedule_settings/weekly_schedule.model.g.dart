@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'working_hours.model.dart';
+part of 'weekly_schedule.model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-WorkingHours _$WorkingHoursFromJson(Map json) {
-  return WorkingHours(
+WeeklySchedule _$WeeklyScheduleFromJson(Map json) {
+  return WeeklySchedule(
     monday: (json['monday'] as List<dynamic>)
         .map((e) =>
             TimeIntervalInSecs.fromJson(Map<String, dynamic>.from(e as Map)))
@@ -39,7 +39,7 @@ WorkingHours _$WorkingHoursFromJson(Map json) {
   );
 }
 
-Map<String, dynamic> _$WorkingHoursToJson(WorkingHours instance) =>
+Map<String, dynamic> _$WeeklyScheduleToJson(WeeklySchedule instance) =>
     <String, dynamic>{
       'monday': instance.monday.map((e) => e.toJson()).toList(),
       'tuesday': instance.tuesday.map((e) => e.toJson()).toList(),

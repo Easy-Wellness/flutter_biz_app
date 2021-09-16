@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'working_hours.model.g.dart';
+part 'weekly_schedule.model.g.dart';
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
-class WorkingHours {
-  const WorkingHours({
+class WeeklySchedule {
+  const WeeklySchedule({
     required this.monday,
     required this.tuesday,
     required this.wednesday,
@@ -22,10 +22,10 @@ class WorkingHours {
   final List<TimeIntervalInSecs> saturday;
   final List<TimeIntervalInSecs> sunday;
 
-  factory WorkingHours.fromJson(Map<String, dynamic> json) =>
-      _$WorkingHoursFromJson(json);
+  factory WeeklySchedule.fromJson(Map<String, dynamic> json) =>
+      _$WeeklyScheduleFromJson(json);
 
-  Map<String, dynamic> toJson() => _$WorkingHoursToJson(this);
+  Map<String, dynamic> toJson() => _$WeeklyScheduleToJson(this);
 }
 
 @JsonSerializable(anyMap: true, explicitToJson: true)

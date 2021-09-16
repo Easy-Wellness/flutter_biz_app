@@ -1,4 +1,4 @@
-import 'package:easy_wellness_biz_app/models/working_hours/working_hours.model.dart';
+import 'package:easy_wellness_biz_app/widgets/weekly_schedule_settings/weekly_schedule.model.dart';
 
 const specialties = [
   'dermatology', // skin, hair, nails, and some cosmetic problems.
@@ -11,7 +11,7 @@ const specialties = [
   'chiropractic',
 ];
 
-const defaultWorkingHoursInSecs = WorkingHours(
+const defaultWorkingHoursInSecs = WeeklySchedule(
   monday: [defaultWorkingTimeInterval],
   tuesday: [defaultWorkingTimeInterval],
   wednesday: [defaultWorkingTimeInterval],
