@@ -1,29 +1,34 @@
-import 'package:easy_wellness_biz_app/models/working_hours/working_hours.model.dart';
 import 'package:easy_wellness_biz_app/utils/seconds_to_friendly_time.dart';
-import 'package:easy_wellness_biz_app/widgets/working_hours_input/edit_working_hours_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 
-class WorkingHoursInput extends StatefulWidget {
-  const WorkingHoursInput({
+import 'edit_weekly_schedule_screen.dart';
+import 'weekly_schedule.model.dart';
+
+/// Configure the usual time intervals when the scheduled activity is run on
+/// certain days of the week.
+class WeeklyScheduleSettings extends StatefulWidget {
+  const WeeklyScheduleSettings({
     Key? key,
+    required this.label,
     required this.initialValue,
   }) : super(key: key);
 
-  final WorkingHours initialValue;
+  final String label;
+  final WeeklySchedule initialValue;
 
   @override
-  _WorkingHoursInputState createState() => _WorkingHoursInputState();
+  _WeeklyScheduleSettingsState createState() => _WeeklyScheduleSettingsState();
 }
 
-class _WorkingHoursInputState extends State<WorkingHoursInput> {
+class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Working hours',
+          widget.label,
           style: TextStyle(color: Theme.of(context).hintColor),
         ),
         const SizedBox(height: 16),
@@ -70,7 +75,7 @@ class _WorkingHoursInputState extends State<WorkingHoursInput> {
                   final newHours = Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => EditWorkingHoursScreen(
+                      builder: (_) => EditWeeklyScheduleScreen(
                         initialHours: widget.initialValue,
                       ),
                     ),

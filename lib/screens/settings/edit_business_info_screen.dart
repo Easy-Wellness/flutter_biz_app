@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
-import 'package:easy_wellness_biz_app/models/working_hours/working_hours.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/utils/form_validation_manager.dart';
 import 'package:easy_wellness_biz_app/widgets/basic_business_info_form_fields.dart';
 import 'package:easy_wellness_biz_app/widgets/pick_location_screen.dart';
-import 'package:easy_wellness_biz_app/widgets/working_hours_input/working_hours_input.dart';
+import 'package:easy_wellness_biz_app/widgets/weekly_schedule_settings/weekly_schedule.model.dart';
+import 'package:easy_wellness_biz_app/widgets/weekly_schedule_settings/weekly_schedule_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +50,7 @@ class _BodyState extends State<Body> {
   GeoLocation? businessLocation;
   String phoneNumber = '';
   String email = '';
-  WorkingHours? workingHours;
+  WeeklySchedule? workingHours;
   String? website;
 
   @override
@@ -107,7 +107,10 @@ class _BodyState extends State<Body> {
                         onEmailSaved: (value) => email = value!,
                         onWebsiteSaved: (value) => website = value,
                       ),
-                      WorkingHoursInput(initialValue: place.workingHours),
+                      WeeklyScheduleSettings(
+                        label: 'Working hours',
+                        initialValue: place.workingHours,
+                      ),
                       Container(
                         width: double.infinity,
                         child: ElevatedButton(

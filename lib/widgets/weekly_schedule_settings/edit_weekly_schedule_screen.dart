@@ -1,18 +1,19 @@
 import 'package:collection/collection.dart';
 import 'package:easy_wellness_biz_app/constants/misc.dart';
-import 'package:easy_wellness_biz_app/models/working_hours/working_hours.model.dart';
 import 'package:easy_wellness_biz_app/utils/seconds_to_friendly_time.dart';
 import 'package:easy_wellness_biz_app/widgets/custom_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class EditWorkingHoursScreen extends StatelessWidget {
-  const EditWorkingHoursScreen({
+import 'weekly_schedule.model.dart';
+
+class EditWeeklyScheduleScreen extends StatelessWidget {
+  const EditWeeklyScheduleScreen({
     Key? key,
     required this.initialHours,
   }) : super(key: key);
 
-  final WorkingHours initialHours;
+  final WeeklySchedule initialHours;
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +117,7 @@ class _HoursForSpecificDaySetterState extends State<HoursForSpecificDaySetter> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        const SizedBox(width: 6),
         (position == 0)
             ? CustomSwitch(
                 value: isOpened,
@@ -137,36 +139,46 @@ class _HoursForSpecificDaySetterState extends State<HoursForSpecificDaySetter> {
               )
             : const SizedBox(width: 88),
         VerticalDivider(thickness: 1, color: Colors.grey[400]),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(isOpened ? 'OPEN' : ''),
-            const SizedBox(height: 8),
-            Text(
-              isOpened
-                  ? secondsToFriendlyTime(interval!.start)
-                  : List.generate(16, (_) => ' ').join(),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.w500,
-              ),
+        Expanded(
+          child: InkWell(
+            onTap: isOpened ? () {} : null,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(isOpened ? 'OPEN' : ''),
+                const SizedBox(height: 8),
+                Text(
+                  isOpened
+                      ? secondsToFriendlyTime(interval!.start)
+                      : List.generate(16, (_) => ' ').join(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
         VerticalDivider(thickness: 1, color: Colors.grey[400]),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(isOpened ? 'CLOSE' : 'CLOSED'),
-            const SizedBox(height: 8),
-            Text(
-              isOpened ? secondsToFriendlyTime(interval!.end) : 'ALL DAY',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.w500,
-              ),
+        Expanded(
+          child: InkWell(
+            onTap: isOpened ? () {} : null,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(isOpened ? 'CLOSE' : 'CLOSED'),
+                const SizedBox(height: 8),
+                Text(
+                  isOpened ? secondsToFriendlyTime(interval!.end) : 'ALL DAY',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
         VerticalDivider(thickness: 1, color: Colors.grey[400]),
         (position == 0)
@@ -180,7 +192,7 @@ class _HoursForSpecificDaySetterState extends State<HoursForSpecificDaySetter> {
                     final nextEnd = timeIntervalList.last.end + 7200;
                     timeIntervalList.add(TimeIntervalInSecs(
                       start: (nextStart >= 86400) ? 82800 : nextStart,
-                      end: (nextStart >= 86400) ? 86400 : nextEnd,
+                      end: (nextEnd > 86400) ? 86400 : nextEnd,
                     ));
                   }
                 }),
@@ -192,7 +204,7 @@ class _HoursForSpecificDaySetterState extends State<HoursForSpecificDaySetter> {
                     setState(() => timeIntervalList.remove(interval)),
                 icon: Icon(Icons.delete_forever_outlined),
                 color: Theme.of(context).colorScheme.secondary,
-              )
+              ),
       ],
     );
   }
