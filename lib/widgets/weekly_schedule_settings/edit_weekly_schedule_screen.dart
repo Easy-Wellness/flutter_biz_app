@@ -1,10 +1,9 @@
 import 'package:collection/collection.dart';
-import 'package:easy_wellness_biz_app/constants/misc.dart';
-import 'package:easy_wellness_biz_app/utils/seconds_to_friendly_time.dart';
-import 'package:easy_wellness_biz_app/widgets/custom_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'custom_switch.dart';
+import 'seconds_to_friendly_time.dart';
 import 'weekly_schedule.model.dart';
 
 class EditWeeklyScheduleScreen extends StatelessWidget {
@@ -209,3 +208,15 @@ class _HoursForSpecificDaySetterState extends State<HoursForSpecificDaySetter> {
     );
   }
 }
+
+const defaultWorkingHoursInSecs = WeeklySchedule(
+  monday: [defaultWorkingTimeInterval],
+  tuesday: [defaultWorkingTimeInterval],
+  wednesday: [defaultWorkingTimeInterval],
+  thursday: [defaultWorkingTimeInterval],
+  friday: [defaultWorkingTimeInterval],
+  saturday: [],
+  sunday: [],
+);
+
+const defaultWorkingTimeInterval = TimeIntervalInSecs(start: 28800, end: 61200);

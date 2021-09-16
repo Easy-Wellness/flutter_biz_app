@@ -1,8 +1,8 @@
-import 'package:easy_wellness_biz_app/utils/seconds_to_friendly_time.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 
 import 'edit_weekly_schedule_screen.dart';
+import 'seconds_to_friendly_time.dart';
 import 'weekly_schedule.model.dart';
 
 /// Configure the usual time intervals when the scheduled activity is run on

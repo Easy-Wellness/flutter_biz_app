@@ -10,15 +10,3 @@ const specialties = [
   'plastic surgery',
   'chiropractic',
 ];
-
-const defaultWorkingHoursInSecs = WeeklySchedule(
-  monday: [defaultWorkingTimeInterval],
-  tuesday: [defaultWorkingTimeInterval],
-  wednesday: [defaultWorkingTimeInterval],
-  thursday: [defaultWorkingTimeInterval],
-  friday: [defaultWorkingTimeInterval],
-  saturday: [],
-  sunday: [],
-);
-
-const defaultWorkingTimeInterval = TimeIntervalInSecs(start: 28800, end: 61200);

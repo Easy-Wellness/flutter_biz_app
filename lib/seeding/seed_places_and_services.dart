@@ -7,6 +7,7 @@ import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
 import 'package:easy_wellness_biz_app/models/nearby_service/db_nearby_service.model.dart';
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/services/gmp_service/find_nearby_places.service.dart';
+import 'package:easy_wellness_biz_app/widgets/weekly_schedule_settings/edit_weekly_schedule_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:http/http.dart' as http;
