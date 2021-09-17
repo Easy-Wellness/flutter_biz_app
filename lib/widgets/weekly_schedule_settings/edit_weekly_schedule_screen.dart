@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'custom_switch.dart';
+import '../custom_switch.dart';
 import 'seconds_to_friendly_time.dart';
 import 'weekly_schedule.model.dart';
 
@@ -88,9 +88,10 @@ class _TimeIntervalListForSpecificDaySetterState
               key: UniqueKey(),
               height: 64,
               child: TimeIntervalRowForSpecificDay(
-                dayOfWeekText: widget.dayOfWeek,
+                dayOfWeek: widget.dayOfWeek,
                 isOpened: isOpened,
                 position: 0,
+                timeIntervalList: timeIntervalList,
                 onToggle: handleToggle,
                 onAddBtnTap: addNewInterval,
                 onRemoveBtnTap: (interval) => removeInterval(interval),
@@ -104,10 +105,11 @@ class _TimeIntervalListForSpecificDaySetterState
                           key: UniqueKey(),
                           height: 64,
                           child: TimeIntervalRowForSpecificDay(
-                            dayOfWeekText: widget.dayOfWeek,
+                            dayOfWeek: widget.dayOfWeek,
                             isOpened: isOpened,
                             position: index,
                             initialInterval: interval,
+                            timeIntervalList: timeIntervalList,
                             onToggle: handleToggle,
                             onAddBtnTap: addNewInterval,
                             onRemoveBtnTap: (interval) =>
@@ -164,16 +166,17 @@ class _TimeIntervalListForSpecificDaySetterState
 class TimeIntervalRowForSpecificDay extends StatefulWidget {
   const TimeIntervalRowForSpecificDay({
     Key? key,
-    required this.dayOfWeekText,
+    required this.dayOfWeek,
     required this.isOpened,
     required this.position,
     this.initialInterval,
+    required this.timeIntervalList,
     required this.onToggle,
     required this.onAddBtnTap,
     required this.onRemoveBtnTap,
   }) : super(key: key);
 
-  final String dayOfWeekText;
+  final String dayOfWeek;
   final bool isOpened;
 
   /// [position] of this interval in a list of time intervals located at
@@ -183,6 +186,11 @@ class TimeIntervalRowForSpecificDay extends StatefulWidget {
   /// When the business is closed on this day of the week, there is no time
   /// interval available, hence [interval] is [null]
   final TimeIntervalInSecs? initialInterval;
+
+  /// The current list of time intervals for this day of the week. This data
+  /// allows the [TimeIntervalRowForSpecificDay] widget to enable or disable
+  /// the add button when the number of time intervals exceed 4
+  final List<TimeIntervalInSecs> timeIntervalList;
 
   final void Function(bool) onToggle;
   final void Function() onAddBtnTap;
@@ -205,7 +213,7 @@ class _TimeIntervalRowForSpecificDayState
 
   @override
   Widget build(BuildContext context) {
-    final dayOfWeekText = widget.dayOfWeekText.substring(0, 3).toUpperCase();
+    final dayOfWeek = widget.dayOfWeek.substring(0, 3).toUpperCase();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -216,8 +224,8 @@ class _TimeIntervalRowForSpecificDayState
                 width: 88,
                 activeColor: CupertinoColors.systemGreen,
                 showOnOff: true,
-                activeText: dayOfWeekText,
-                inactiveText: dayOfWeekText,
+                activeText: dayOfWeek,
+                inactiveText: dayOfWeek,
                 onToggle: (b) => widget.onToggle(b),
               )
             : const SizedBox(width: 88),
@@ -268,7 +276,9 @@ class _TimeIntervalRowForSpecificDayState
         VerticalDivider(thickness: 1, color: Colors.grey[400]),
         (widget.position == 0)
             ? IconButton(
-                onPressed: widget.onAddBtnTap,
+                onPressed: (widget.timeIntervalList.length <= 3)
+                    ? widget.onAddBtnTap
+                    : null,
                 icon: Icon(Icons.add),
                 color: Theme.of(context).colorScheme.secondary,
               )
