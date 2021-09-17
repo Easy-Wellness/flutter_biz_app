@@ -108,8 +108,8 @@ class _BodyState extends State<Body> {
                         onWebsiteSaved: (value) => website = value,
                       ),
                       WeeklyScheduleSettings(
-                        label: 'Working hours',
-                        initialValue: place.workingHours,
+                        labelText: 'Working hours',
+                        initialSchedule: place.workingHours,
                       ),
                       Container(
                         width: double.infinity,

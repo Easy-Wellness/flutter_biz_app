@@ -9,16 +9,18 @@ import 'weekly_schedule.model.dart';
 class EditWeeklyScheduleScreen extends StatelessWidget {
   const EditWeeklyScheduleScreen({
     Key? key,
-    required this.initialHours,
+    required this.titleText,
+    required this.initialSchedule,
   }) : super(key: key);
 
-  final WeeklySchedule initialHours;
+  final String titleText;
+  final WeeklySchedule initialSchedule;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Working Hours'),
+        title: Text(titleText),
       ),
       body: Scrollbar(
         child: SingleChildScrollView(
@@ -27,11 +29,11 @@ class EditWeeklyScheduleScreen extends StatelessWidget {
             child: Column(
               children: [
                 ...[
-                  for (String dayOfWeek in initialHours.toJson().keys)
-                    HoursForSpecificDaySetter(
+                  for (String dayOfWeek in initialSchedule.toJson().keys)
+                    TimeIntervalListForSpecificDaySetter(
                       dayOfWeek: dayOfWeek,
-                      timeIntervalList:
-                          (initialHours.toJson()[dayOfWeek] as List)
+                      initialIntervalList:
+                          (initialSchedule.toJson()[dayOfWeek] as List)
                               .map<TimeIntervalInSecs>((interval) =>
                                   TimeIntervalInSecs.fromJson(interval))
                               .toList(),
@@ -46,29 +48,30 @@ class EditWeeklyScheduleScreen extends StatelessWidget {
   }
 }
 
-class HoursForSpecificDaySetter extends StatefulWidget {
-  const HoursForSpecificDaySetter({
+class TimeIntervalListForSpecificDaySetter extends StatefulWidget {
+  const TimeIntervalListForSpecificDaySetter({
     Key? key,
     required this.dayOfWeek,
-    required this.timeIntervalList,
+    required this.initialIntervalList,
   }) : super(key: key);
 
   final String dayOfWeek;
-  final List<TimeIntervalInSecs> timeIntervalList;
+  final List<TimeIntervalInSecs> initialIntervalList;
 
   @override
-  _HoursForSpecificDaySetterState createState() =>
-      _HoursForSpecificDaySetterState();
+  _TimeIntervalListForSpecificDaySetterState createState() =>
+      _TimeIntervalListForSpecificDaySetterState();
 }
 
-class _HoursForSpecificDaySetterState extends State<HoursForSpecificDaySetter> {
+class _TimeIntervalListForSpecificDaySetterState
+    extends State<TimeIntervalListForSpecificDaySetter> {
   bool isOpened = false;
   List<TimeIntervalInSecs> timeIntervalList = [];
 
   @override
   void initState() {
     super.initState();
-    timeIntervalList = widget.timeIntervalList;
+    timeIntervalList = widget.initialIntervalList;
     isOpened = timeIntervalList.isNotEmpty;
   }
 

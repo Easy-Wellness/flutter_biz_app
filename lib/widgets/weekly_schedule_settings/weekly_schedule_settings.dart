@@ -10,12 +10,20 @@ import 'weekly_schedule.model.dart';
 class WeeklyScheduleSettings extends StatefulWidget {
   const WeeklyScheduleSettings({
     Key? key,
-    required this.label,
-    required this.initialValue,
+    required this.labelText,
+    this.initialSchedule = const WeeklySchedule(
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [],
+      sunday: [],
+    ),
   }) : super(key: key);
 
-  final String label;
-  final WeeklySchedule initialValue;
+  final String labelText;
+  final WeeklySchedule initialSchedule;
 
   @override
   _WeeklyScheduleSettingsState createState() => _WeeklyScheduleSettingsState();
@@ -28,7 +36,7 @@ class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.label,
+          widget.labelText,
           style: TextStyle(color: Theme.of(context).hintColor),
         ),
         const SizedBox(height: 16),
@@ -43,7 +51,8 @@ class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
               Expanded(
                 child: Column(
                   children: [
-                    for (String dayOfWeek in widget.initialValue.toJson().keys)
+                    for (String dayOfWeek
+                        in widget.initialSchedule.toJson().keys)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Row(
@@ -59,7 +68,7 @@ class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
                             const SizedBox(width: 8),
                             _buildTimeRangeListItems(
                                 context,
-                                (widget.initialValue.toJson()[dayOfWeek]
+                                (widget.initialSchedule.toJson()[dayOfWeek]
                                         as List)
                                     .map<TimeIntervalInSecs>((interval) =>
                                         TimeIntervalInSecs.fromJson(interval))
@@ -76,7 +85,8 @@ class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => EditWeeklyScheduleScreen(
-                        initialHours: widget.initialValue,
+                        titleText: widget.labelText,
+                        initialSchedule: widget.initialSchedule,
                       ),
                     ),
                   );
