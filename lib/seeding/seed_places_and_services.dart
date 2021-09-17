@@ -45,7 +45,7 @@ Future<void> seedPlacesAndServices() async {
           name: clinicName,
           geoPosition: geoPos,
           ownerId: FirebaseAuth.instance.currentUser!.uid,
-          workingHours: defaultWorkingHoursInSecs,
+          workingHours: defaultWeeklySchedule,
           email: 'versatileclinic@clinic.biz.com',
           phoneNumber: '(+84) 12 345 67 89',
           address: address,

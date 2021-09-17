@@ -100,7 +100,7 @@ class _BodyState extends State<Body> {
                           geoPosition: geoPos,
                           email: email,
                           phoneNumber: phoneNumber,
-                          workingHours: defaultWorkingHoursInSecs,
+                          workingHours: defaultWeeklySchedule,
                           address: businessLocation!.address,
                           website: website,
                           status: 'operational',
