@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../custom_switch.dart';
 import 'seconds_to_friendly_time.dart';
+import 'show_custom_time_picker.dart';
 import 'weekly_schedule.model.dart';
 
 class EditWeeklyScheduleScreen extends StatelessWidget {
@@ -38,7 +39,7 @@ class EditWeeklyScheduleScreen extends StatelessWidget {
                                   TimeIntervalInSecs.fromJson(interval))
                               .toList(),
                     )
-                ].expand((widget) => [widget, const SizedBox(height: 16)])
+                ].expand((widget) => [widget, const SizedBox(height: 24)])
               ],
             ),
           ),
@@ -108,8 +109,9 @@ class _TimeIntervalListForSpecificDaySetterState
                             dayOfWeek: widget.dayOfWeek,
                             isOpened: isOpened,
                             position: index,
-                            initialInterval: interval,
                             timeIntervalList: timeIntervalList,
+                            start: interval.start,
+                            end: interval.end,
                             onToggle: handleToggle,
                             onAddBtnTap: addNewInterval,
                             onRemoveBtnTap: (interval) =>
@@ -162,14 +164,18 @@ class _TimeIntervalListForSpecificDaySetterState
   }
 }
 
-/// Render a list of time intervals for a specific day of the week
+/// Render a single time interval at the [position] in the provided
+/// [timeIntervalList] associated with a specific day of week. In the case
+/// where this day of week is closed ([isOpened] is false and the [start] and
+/// [end] are null), a row is still built in the UI.
 class TimeIntervalRowForSpecificDay extends StatefulWidget {
   const TimeIntervalRowForSpecificDay({
     Key? key,
     required this.dayOfWeek,
     required this.isOpened,
     required this.position,
-    this.initialInterval,
+    this.start,
+    this.end,
     required this.timeIntervalList,
     required this.onToggle,
     required this.onAddBtnTap,
@@ -183,9 +189,10 @@ class TimeIntervalRowForSpecificDay extends StatefulWidget {
   /// [TimeIntervalListForSpecificDaySetter].
   final int position;
 
-  /// When the business is closed on this day of the week, there is no time
-  /// interval available, hence [interval] is [null]
-  final TimeIntervalInSecs? initialInterval;
+  /// When the business is closed on this day of week, there is no time
+  /// interval available, hence both [start] and [end] are null
+  final int? start;
+  final int? end;
 
   /// The current list of time intervals for this day of the week. This data
   /// allows the [TimeIntervalRowForSpecificDay] widget to enable or disable
@@ -203,12 +210,14 @@ class TimeIntervalRowForSpecificDay extends StatefulWidget {
 
 class _TimeIntervalRowForSpecificDayState
     extends State<TimeIntervalRowForSpecificDay> {
-  TimeIntervalInSecs? interval;
+  int? start;
+  int? end;
 
   @override
   void initState() {
     super.initState();
-    interval = widget.initialInterval;
+    start = widget.start;
+    end = widget.end;
   }
 
   @override
@@ -232,7 +241,15 @@ class _TimeIntervalRowForSpecificDayState
         VerticalDivider(thickness: 1, color: Colors.grey[400]),
         Expanded(
           child: InkWell(
-            onTap: widget.isOpened ? () {} : null,
+            onTap: widget.isOpened
+                ? () {
+                    showCustomTimePicker(
+                      context: context,
+                      initialTimeInSecs: start!,
+                      onTimeChanged: (time) => setState(() => start = time),
+                    );
+                  }
+                : null,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -240,7 +257,7 @@ class _TimeIntervalRowForSpecificDayState
                 const SizedBox(height: 8),
                 Text(
                   widget.isOpened
-                      ? secondsToFriendlyTime(interval!.start)
+                      ? secondsToFriendlyTime(start!)
                       : List.generate(16, (_) => ' ').join(),
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
@@ -254,16 +271,22 @@ class _TimeIntervalRowForSpecificDayState
         VerticalDivider(thickness: 1, color: Colors.grey[400]),
         Expanded(
           child: InkWell(
-            onTap: widget.isOpened ? () {} : null,
+            onTap: widget.isOpened
+                ? () {
+                    showCustomTimePicker(
+                      context: context,
+                      initialTimeInSecs: end!,
+                      onTimeChanged: (time) => setState(() => end = time),
+                    );
+                  }
+                : null,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(widget.isOpened ? 'CLOSE' : 'CLOSED'),
                 const SizedBox(height: 8),
                 Text(
-                  widget.isOpened
-                      ? secondsToFriendlyTime(interval!.end)
-                      : 'ALL DAY',
+                  widget.isOpened ? secondsToFriendlyTime(end!) : 'ALL DAY',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.w500,
@@ -283,7 +306,8 @@ class _TimeIntervalRowForSpecificDayState
                 color: Theme.of(context).colorScheme.secondary,
               )
             : IconButton(
-                onPressed: () => widget.onRemoveBtnTap(interval!),
+                onPressed: () => widget
+                    .onRemoveBtnTap(widget.timeIntervalList[widget.position]),
                 icon: Icon(Icons.delete_forever_outlined),
                 color: Theme.of(context).colorScheme.secondary,
               ),
