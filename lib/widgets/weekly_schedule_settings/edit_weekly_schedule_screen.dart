@@ -67,12 +67,16 @@ class TimeIntervalListForSpecificDaySetter extends StatefulWidget {
 class _TimeIntervalListForSpecificDaySetterState
     extends State<TimeIntervalListForSpecificDaySetter> {
   bool isOpened = false;
-  List<TimeIntervalInSecs> timeIntervalList = [];
+  final List<TimeIntervalInSecs> timeIntervalList = [];
+  final List<String> rowIds = [];
 
   @override
   void initState() {
     super.initState();
-    timeIntervalList = widget.initialIntervalList;
+    widget.initialIntervalList.forEach((interval) {
+      timeIntervalList.add(interval);
+      rowIds.add(UniqueKey().toString());
+    });
     isOpened = timeIntervalList.isNotEmpty;
   }
 
@@ -103,7 +107,7 @@ class _TimeIntervalListForSpecificDaySetterState
               children: [
                 ...timeIntervalList
                     .mapIndexed((index, interval) => Container(
-                          key: UniqueKey(),
+                          key: ValueKey(rowIds[index]),
                           height: 64,
                           child: TimeIntervalRowForSpecificDay(
                             dayOfWeek: widget.dayOfWeek,
@@ -134,12 +138,17 @@ class _TimeIntervalListForSpecificDaySetterState
     setState(() {
       isOpened = b;
       final isClosed = !isOpened;
-      if (timeIntervalList.isEmpty && isOpened)
 
-        /// The business is currently closed on this day but the
-        /// user toggles to open it
-        return timeIntervalList.add(defaultTimeIntervalInSecs);
-      if (isClosed) timeIntervalList.clear();
+      /// The business is currently closed on this day but the
+      /// user toggles to open it
+      if (isOpened && timeIntervalList.isEmpty) {
+        timeIntervalList.add(defaultTimeIntervalInSecs);
+        rowIds.add(UniqueKey().toString());
+      }
+      if (isClosed) {
+        timeIntervalList.clear();
+        rowIds.clear();
+      }
     });
   }
 
@@ -148,6 +157,7 @@ class _TimeIntervalListForSpecificDaySetterState
       if (!isOpened) {
         isOpened = true;
         timeIntervalList.add(defaultTimeIntervalInSecs);
+        rowIds.add(UniqueKey().toString());
       } else {
         final nextStart = timeIntervalList.last.end + 3600;
         final nextEnd = timeIntervalList.last.end + 7200;
@@ -155,12 +165,16 @@ class _TimeIntervalListForSpecificDaySetterState
           start: (nextStart >= 86400) ? 82800 : nextStart,
           end: (nextEnd > 86400) ? 86400 : nextEnd,
         ));
+        rowIds.add(UniqueKey().toString());
       }
     });
   }
 
-  void removeInterval(TimeIntervalInSecs interval) {
-    setState(() => timeIntervalList.remove(interval));
+  void removeInterval(int position) {
+    setState(() {
+      timeIntervalList.removeAt(position);
+      rowIds.removeAt(position);
+    });
   }
 }
 
@@ -201,7 +215,7 @@ class TimeIntervalRowForSpecificDay extends StatefulWidget {
 
   final void Function(bool) onToggle;
   final void Function() onAddBtnTap;
-  final void Function(TimeIntervalInSecs) onRemoveBtnTap;
+  final void Function(int position) onRemoveBtnTap;
 
   @override
   _TimeIntervalRowForSpecificDayState createState() =>
@@ -260,7 +274,13 @@ class _TimeIntervalRowForSpecificDayState
                       ? secondsToFriendlyTime(start!)
                       : List.generate(16, (_) => ' ').join(),
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: widget.isOpened && !intervalIsValid(start!, end!)
+                        ? Theme.of(context).colorScheme.error
+                        : Theme.of(context).colorScheme.secondary,
+                    decoration:
+                        widget.isOpened && !intervalIsValid(start!, end!)
+                            ? TextDecoration.lineThrough
+                            : null,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -288,7 +308,13 @@ class _TimeIntervalRowForSpecificDayState
                 Text(
                   widget.isOpened ? secondsToFriendlyTime(end!) : 'ALL DAY',
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: widget.isOpened && !intervalIsValid(start!, end!)
+                        ? Theme.of(context).colorScheme.error
+                        : Theme.of(context).colorScheme.secondary,
+                    decoration:
+                        widget.isOpened && !intervalIsValid(start!, end!)
+                            ? TextDecoration.lineThrough
+                            : null,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -306,14 +332,17 @@ class _TimeIntervalRowForSpecificDayState
                 color: Theme.of(context).colorScheme.secondary,
               )
             : IconButton(
-                onPressed: () => widget
-                    .onRemoveBtnTap(widget.timeIntervalList[widget.position]),
+                onPressed: () => widget.onRemoveBtnTap(widget.position),
                 icon: Icon(Icons.delete_forever_outlined),
                 color: Theme.of(context).colorScheme.secondary,
               ),
       ],
     );
   }
+}
+
+bool intervalIsValid(int start, int end) {
+  return start < end;
 }
 
 const defaultWeeklySchedule = WeeklySchedule(

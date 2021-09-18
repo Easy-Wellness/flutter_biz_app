@@ -51,7 +51,7 @@ class _BodyState extends State<Body> {
               controller: _emailInpController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                hintText: 'Sign in with email',
+                hintText: 'Sign in with email link',
                 prefixIcon: const Icon(Icons.email),
                 suffixIcon: _isEmpty
                     ? null
