@@ -96,7 +96,7 @@ class _TimeIntervalListForSpecificDaySetterState
                 dayOfWeek: widget.dayOfWeek,
                 isOpened: isOpened,
                 position: 0,
-                timeIntervalList: timeIntervalList,
+                nIntervalsForSpecificDay: timeIntervalList.length,
                 onToggle: handleToggle,
                 onAddBtnTap: addNewInterval,
                 onRemoveBtnTap: (interval) => removeInterval(interval),
@@ -113,9 +113,9 @@ class _TimeIntervalListForSpecificDaySetterState
                             dayOfWeek: widget.dayOfWeek,
                             isOpened: isOpened,
                             position: index,
-                            timeIntervalList: timeIntervalList,
-                            start: interval.start,
-                            end: interval.end,
+                            nIntervalsForSpecificDay: timeIntervalList.length,
+                            initialStart: interval.start,
+                            initialEnd: interval.end,
                             onToggle: handleToggle,
                             onAddBtnTap: addNewInterval,
                             onRemoveBtnTap: (interval) =>
@@ -180,17 +180,17 @@ class _TimeIntervalListForSpecificDaySetterState
 
 /// Render a single time interval at the [position] in the provided
 /// [timeIntervalList] associated with a specific day of week. In the case
-/// where this day of week is closed ([isOpened] is false and the [start] and
-/// [end] are null), a row is still built in the UI.
+/// where this day of week is closed ([isOpened] is false and both
+/// [initialStart] and [initialEnd] are null), a row is still built in the UI.
 class TimeIntervalRowForSpecificDay extends StatefulWidget {
   const TimeIntervalRowForSpecificDay({
     Key? key,
     required this.dayOfWeek,
     required this.isOpened,
     required this.position,
-    this.start,
-    this.end,
-    required this.timeIntervalList,
+    this.initialStart,
+    this.initialEnd,
+    required this.nIntervalsForSpecificDay,
     required this.onToggle,
     required this.onAddBtnTap,
     required this.onRemoveBtnTap,
@@ -202,16 +202,9 @@ class TimeIntervalRowForSpecificDay extends StatefulWidget {
   /// [position] of this interval in a list of time intervals located at
   /// [TimeIntervalListForSpecificDaySetter].
   final int position;
-
-  /// When the business is closed on this day of week, there is no time
-  /// interval available, hence both [start] and [end] are null
-  final int? start;
-  final int? end;
-
-  /// The current list of time intervals for this day of the week. This data
-  /// allows the [TimeIntervalRowForSpecificDay] widget to enable or disable
-  /// the add button when the number of time intervals exceed 4
-  final List<TimeIntervalInSecs> timeIntervalList;
+  final int? initialStart;
+  final int? initialEnd;
+  final int nIntervalsForSpecificDay;
 
   final void Function(bool) onToggle;
   final void Function() onAddBtnTap;
@@ -224,14 +217,16 @@ class TimeIntervalRowForSpecificDay extends StatefulWidget {
 
 class _TimeIntervalRowForSpecificDayState
     extends State<TimeIntervalRowForSpecificDay> {
+  /// When the business is closed on this day of week, there is no time
+  /// interval available, hence both [start] and [end] are null
   int? start;
   int? end;
 
   @override
   void initState() {
     super.initState();
-    start = widget.start;
-    end = widget.end;
+    start = widget.initialStart;
+    end = widget.initialEnd;
   }
 
   @override
@@ -325,15 +320,15 @@ class _TimeIntervalRowForSpecificDayState
         VerticalDivider(thickness: 1, color: Colors.grey[400]),
         (widget.position == 0)
             ? IconButton(
-                onPressed: (widget.timeIntervalList.length <= 3)
+                onPressed: (widget.nIntervalsForSpecificDay <= 3)
                     ? widget.onAddBtnTap
                     : null,
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 color: Theme.of(context).colorScheme.secondary,
               )
             : IconButton(
                 onPressed: () => widget.onRemoveBtnTap(widget.position),
-                icon: Icon(Icons.delete_forever_outlined),
+                icon: const Icon(Icons.delete_forever_outlined),
                 color: Theme.of(context).colorScheme.secondary,
               ),
       ],
