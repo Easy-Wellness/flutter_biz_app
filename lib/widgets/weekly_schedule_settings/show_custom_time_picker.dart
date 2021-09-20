@@ -39,10 +39,15 @@ void showCustomTimePicker({
                   mode: CupertinoDatePickerMode.time,
                   initialDateTime:
                       today.add(Duration(seconds: initialTimeInSecs)),
-                  onDateTimeChanged: (newDateTime) => onTimeChanged(
-                      (newDateTime.millisecondsSinceEpoch -
-                              today.millisecondsSinceEpoch) ~/
-                          1000),
+                  onDateTimeChanged: (newDateTime) {
+                    final timeInSecs = (newDateTime.millisecondsSinceEpoch -
+                            today.millisecondsSinceEpoch) ~/
+                        1000;
+
+                    /// If it is 12:00 AM midnight, the time in seconds will be
+                    /// 24 hours * 3600 seconds
+                    onTimeChanged(timeInSecs == 0 ? 86400 : timeInSecs);
+                  },
                 ),
               ),
             )
