@@ -81,7 +81,7 @@ class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
               ),
               IconButton(
                 onPressed: () async {
-                  final newHours = await Navigator.push(
+                  final WeeklySchedule? newHours = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => EditWeeklyScheduleScreen(
