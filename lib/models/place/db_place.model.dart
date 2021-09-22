@@ -12,9 +12,12 @@ class DbPlace {
     required this.name,
     required this.address,
     required this.phoneNumber,
-    required this.status,
     required this.email,
     required this.workingHours,
+    this.status,
+    this.minuteIncrements,
+    this.minLeadHours,
+    this.maxLeadDays,
     this.website,
   });
 
@@ -30,6 +33,19 @@ class DbPlace {
   @JsonKey(name: 'working_hours')
   final WeeklySchedule workingHours;
 
+  /// The minutes between two bookings. The value is always <=24 hours
+  /// (= 1440 mins).
+  @JsonKey(name: 'minute_increments')
+  final int? minuteIncrements;
+
+  /// The allowed minimum of hours in advance the appointment can be booked.
+  @JsonKey(name: 'min_lead_hours')
+  final double? minLeadHours;
+
+  /// The allowed maximum of days in advance the appointment can be booked.
+  @JsonKey(name: 'max_lead_days')
+  final int? maxLeadDays;
+
   final String name;
   final String address;
   final String email;
@@ -37,7 +53,7 @@ class DbPlace {
 
   /// The allowed values include: operational, closed_temporarily,
   /// and closed_permanently
-  final String status;
+  final String? status;
 
   factory DbPlace.fromJson(Map<String, dynamic> json) =>
       _$DbPlaceFromJson(json);

@@ -37,6 +37,7 @@ void showCustomTimePicker({
                 ),
                 child: CupertinoDatePicker(
                   mode: CupertinoDatePickerMode.time,
+                  minuteInterval: 5,
                   initialDateTime:
                       today.add(Duration(seconds: initialTimeInSecs)),
                   onDateTimeChanged: (newDateTime) {

@@ -102,8 +102,11 @@ class _BodyState extends State<Body> {
                           phoneNumber: phoneNumber,
                           workingHours: defaultWeeklySchedule,
                           address: businessLocation!.address,
-                          website: website,
                           status: 'operational',
+                          minuteIncrements: 30,
+                          minLeadHours: 24,
+                          maxLeadDays: 365,
+                          website: website,
                         ));
                         Provider.of<BusinessPlaceIdNotifier>(context,
                                 listen: false)

@@ -144,16 +144,18 @@ class _BodyState extends State<Body> {
                                 geohash: point.data['geohash'],
                                 geopoint: point.data['geopoint'],
                               );
-                              await snapshot.data!.reference.set(DbPlace(
-                                geoPosition: geoPos,
-                                ownerId: FirebaseAuth.instance.currentUser!.uid,
-                                name: name,
-                                address: businessLocation!.address,
-                                phoneNumber: phoneNumber,
-                                status: 'operational',
-                                email: email,
-                                workingHours: workingHours,
-                              ));
+                              await snapshot.data!.reference.set(
+                                  DbPlace(
+                                    geoPosition: geoPos,
+                                    ownerId:
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                    name: name,
+                                    address: businessLocation!.address,
+                                    phoneNumber: phoneNumber,
+                                    email: email,
+                                    workingHours: workingHours,
+                                  ),
+                                  SetOptions(merge: true));
                               Navigator.pop(context);
                               showCustomSnackBar(context,
                                   'Your business info is updated successfully');

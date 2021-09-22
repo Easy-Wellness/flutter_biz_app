@@ -50,6 +50,9 @@ Future<void> seedPlacesAndServices() async {
           phoneNumber: '(+84) 12 345 67 89',
           address: address,
           status: place.businessStatus.toLowerCase(),
+          minuteIncrements: 30,
+          minLeadHours: 24,
+          maxLeadDays: 365,
         ));
     await Future.wait(
       specialties.map(

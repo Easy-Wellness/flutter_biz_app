@@ -14,10 +14,13 @@ DbPlace _$DbPlaceFromJson(Map json) {
     name: json['name'] as String,
     address: json['address'] as String,
     phoneNumber: json['phone_number'] as String,
-    status: json['status'] as String,
     email: json['email'] as String,
     workingHours: WeeklySchedule.fromJson(
         Map<String, dynamic>.from(json['working_hours'] as Map)),
+    status: json['status'] as String?,
+    minuteIncrements: json['minute_increments'] as int?,
+    minLeadHours: (json['min_lead_hours'] as num?)?.toDouble(),
+    maxLeadDays: json['max_lead_days'] as int?,
     website: json['website'] as String?,
   );
 }
@@ -27,6 +30,9 @@ Map<String, dynamic> _$DbPlaceToJson(DbPlace instance) => <String, dynamic>{
       'owner_id': instance.ownerId,
       'phone_number': instance.phoneNumber,
       'working_hours': instance.workingHours.toJson(),
+      'minute_increments': instance.minuteIncrements,
+      'min_lead_hours': instance.minLeadHours,
+      'max_lead_days': instance.maxLeadDays,
       'name': instance.name,
       'address': instance.address,
       'email': instance.email,
