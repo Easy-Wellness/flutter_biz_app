@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 class EditBusinessInfoScreen extends StatelessWidget {
   const EditBusinessInfoScreen({Key? key}) : super(key: key);
 
-  static const String routeName = '/edit_business_info_screen';
+  static const String routeName = '/edit_business_info';
 
   @override
   Widget build(BuildContext context) {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
+import 'package:easy_wellness_biz_app/screens/settings/change_default_scheduling_policy_screen.dart';
 import 'package:easy_wellness_biz_app/screens/settings/edit_business_info_screen.dart';
 import 'package:easy_wellness_biz_app/utils/navigate_to_root_screen.dart';
 import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';
@@ -46,9 +47,10 @@ class SettingsScreen extends StatelessWidget {
               label: Text('Edit Business Info'),
             ),
             TextButton.icon(
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(
+                  context, ChangeDefaultSchedulingPolicyScreen.routeName),
               icon: Icon(Icons.book_online_outlined),
-              label: Text('Default scheduling policy'),
+              label: Text('Change default scheduling policy'),
             ),
             TextButton.icon(
               onPressed: () => Navigator.pushNamed(

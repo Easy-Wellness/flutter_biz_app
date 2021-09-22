@@ -33,13 +33,13 @@ class EditWeeklyScheduleScreen extends StatelessWidget {
                       Provider.of<_WeeklyScheduleNotifier>(ctx, listen: false);
                   if (!observable.everyIntervalIsValid()) {
                     _showErrDialog(ctx,
-                        'Please remove the opening time that comes after the closing time.');
+                        'The schedule is not correct. Please remove the opening time that comes after the closing time.');
                     return;
                   }
                   observable.saveAll();
                   if (!observable.entireScheduleIsValid()) {
                     _showErrDialog(ctx,
-                        'Please check for overlapping time periods or a time period that immediately comes after another time period.');
+                        'The schedule is not correct. Please check for overlapping time periods or a time period that immediately comes after another time period.');
                     return;
                   }
                   Navigator.pop(ctx, observable.getSchedule());
