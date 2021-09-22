@@ -39,7 +39,7 @@ class EditWeeklyScheduleScreen extends StatelessWidget {
                   observable.saveAll();
                   if (!observable.entireScheduleIsValid()) {
                     _showErrDialog(ctx,
-                        'Please check for overlapping time periods or a time period that immediately comes after another.');
+                        'Please check for overlapping time periods or a time period that immediately comes after another time period.');
                     return;
                   }
                   Navigator.pop(ctx, observable.getSchedule());

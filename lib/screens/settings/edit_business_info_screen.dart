@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/utils/form_validation_manager.dart';
+import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';
 import 'package:easy_wellness_biz_app/widgets/basic_business_info_form_fields.dart';
 import 'package:easy_wellness_biz_app/widgets/pick_location_screen.dart';
 import 'package:easy_wellness_biz_app/widgets/weekly_schedule_settings/weekly_schedule.model.dart';
 import 'package:easy_wellness_biz_app/widgets/weekly_schedule_settings/weekly_schedule_settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:provider/provider.dart';
 
 class EditBusinessInfoScreen extends StatelessWidget {
@@ -50,7 +54,15 @@ class _BodyState extends State<Body> {
   GeoLocation? businessLocation;
   String phoneNumber = '';
   String email = '';
-  WeeklySchedule? workingHours;
+  WeeklySchedule workingHours = const WeeklySchedule(
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: [],
+    saturday: [],
+    sunday: [],
+  );
   String? website;
 
   @override
@@ -76,6 +88,7 @@ class _BodyState extends State<Body> {
           return Center(child: const Text('Something went wrong 😞'));
         if (!snapshot.hasData)
           return Center(child: const CircularProgressIndicator.adaptive());
+        final placeId = snapshot.data!.id;
         final place = snapshot.data!.data()!;
         return Form(
           key: formKey,
@@ -92,7 +105,7 @@ class _BodyState extends State<Body> {
                         formValidationManager: formValidationManager,
                         initialName: place.name,
                         initialBusinessLocation: GeoLocation(
-                          placeId: snapshot.data!.id,
+                          placeId: placeId,
                           address: place.address,
                           latitule: place.geoPosition.geopoint.latitude,
                           longitude: place.geoPosition.geopoint.longitude,
@@ -102,14 +115,19 @@ class _BodyState extends State<Body> {
                         initialWebsite: place.website,
                         onNameSaved: (value) => name = value!.trim(),
                         onBusinessLocationSaved: (value) =>
-                            businessLocation = value,
+                            businessLocation = value!,
                         onPhoneNumbSaved: (value) => phoneNumber = value!,
                         onEmailSaved: (value) => email = value!,
                         onWebsiteSaved: (value) => website = value,
                       ),
-                      WeeklyScheduleSettings(
-                        labelText: 'Working hours',
-                        initialSchedule: place.workingHours,
+                      FormField<WeeklySchedule>(
+                        initialValue: place.workingHours,
+                        builder: (fieldState) => WeeklyScheduleSettings(
+                          labelText: 'Working hours',
+                          initialSchedule: place.workingHours,
+                          onChange: fieldState.didChange,
+                        ),
+                        onSaved: (value) => workingHours = value!,
                       ),
                       Container(
                         width: double.infinity,
@@ -117,44 +135,28 @@ class _BodyState extends State<Body> {
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
                               formKey.currentState!.save();
-                              // final geo = Geoflutterfire();
-                              // final GeoFirePoint point = geo.point(
-                              //   latitude: businessLocation!.latitule,
-                              //   longitude: businessLocation!.longitude,
-                              // );
-                              // final geoPos = GeoPosition(
-                              //   geohash: point.data['geohash'],
-                              //   geopoint: point.data['geopoint'],
-                              // );
-                              // final docSnapshot = await FirebaseFirestore.instance
-                              //     .collection('places')
-                              //     .doc(businessLocation!.placeId)
-                              //     .withConverter<DbPlace>(
-                              //       fromFirestore: (snapshot, _) =>
-                              //           DbPlace.fromJson(snapshot.data()!),
-                              //       toFirestore: (place, _) => place.toJson(),
-                              //     )
-                              //     .get();
-                              // if (docSnapshot.exists)
-                              //   return showCustomSnackBar(context,
-                              //       'There is already a business place at the specified address in our system');
-                              // await docSnapshot.reference.set(DbPlace(
-                              //   name: name,
-                              //   ownerId: FirebaseAuth.instance.currentUser!.uid,
-                              //   geoPosition: geoPos,
-                              //   email: email,
-                              //   phoneNumber: phoneNumber,
-                              //   address: businessLocation!.address,
-                              //   website: website,
-                              //   status: 'operational',
-                              // ));
-                              // Provider.of<BusinessPlaceIdNotifier>(context,
-                              //         listen: false)
-                              //     .businessPlaceId = businessLocation!.placeId;
-                              // navigateToRootScreen(
-                              //     context, RootScreen.settingsScreen);
-                              // showCustomSnackBar(
-                              //     context, 'Welcome to your new business place');
+                              final geo = Geoflutterfire();
+                              final point = geo.point(
+                                latitude: businessLocation!.latitule,
+                                longitude: businessLocation!.longitude,
+                              );
+                              final geoPos = GeoPosition(
+                                geohash: point.data['geohash'],
+                                geopoint: point.data['geopoint'],
+                              );
+                              await snapshot.data!.reference.set(DbPlace(
+                                geoPosition: geoPos,
+                                ownerId: FirebaseAuth.instance.currentUser!.uid,
+                                name: name,
+                                address: businessLocation!.address,
+                                phoneNumber: phoneNumber,
+                                status: 'operational',
+                                email: email,
+                                workingHours: workingHours,
+                              ));
+                              Navigator.pop(context);
+                              showCustomSnackBar(context,
+                                  'Your business info is updated successfully');
                             } else
                               formValidationManager
                                   .erroredFields.first.focusNode

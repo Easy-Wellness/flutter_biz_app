@@ -20,16 +20,26 @@ class WeeklyScheduleSettings extends StatefulWidget {
       saturday: [],
       sunday: [],
     ),
+    required this.onChange,
   }) : super(key: key);
 
   final String labelText;
   final WeeklySchedule initialSchedule;
+  final void Function(WeeklySchedule) onChange;
 
   @override
   _WeeklyScheduleSettingsState createState() => _WeeklyScheduleSettingsState();
 }
 
 class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
+  WeeklySchedule? schedule;
+
+  @override
+  void initState() {
+    schedule = widget.initialSchedule;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -51,8 +61,7 @@ class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
               Expanded(
                 child: Column(
                   children: [
-                    for (String dayOfWeek
-                        in widget.initialSchedule.toJson().keys)
+                    for (final dayOfWeek in schedule!.toJson().keys)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Row(
@@ -68,8 +77,7 @@ class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
                             const SizedBox(width: 8),
                             _buildTimeRangeListItems(
                                 context,
-                                (widget.initialSchedule.toJson()[dayOfWeek]
-                                        as List)
+                                (schedule!.toJson()[dayOfWeek] as List)
                                     .map<TimeIntervalInSecs>((interval) =>
                                         TimeIntervalInSecs.fromJson(interval))
                                     .toList()),
@@ -81,15 +89,19 @@ class _WeeklyScheduleSettingsState extends State<WeeklyScheduleSettings> {
               ),
               IconButton(
                 onPressed: () async {
-                  final WeeklySchedule? newHours = await Navigator.push(
+                  final WeeklySchedule? newSchedule = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => EditWeeklyScheduleScreen(
                         titleText: widget.labelText,
-                        initialSchedule: widget.initialSchedule,
+                        initialSchedule: schedule!,
                       ),
                     ),
                   );
+                  if (newSchedule != null) {
+                    setState(() => schedule = newSchedule);
+                    widget.onChange(newSchedule);
+                  }
                 },
                 icon: Icon(Icons.arrow_forward_ios,
                     color: Theme.of(context).hintColor),
