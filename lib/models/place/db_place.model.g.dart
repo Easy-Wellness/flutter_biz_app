@@ -19,7 +19,7 @@ DbPlace _$DbPlaceFromJson(Map json) {
         Map<String, dynamic>.from(json['working_hours'] as Map)),
     status: json['status'] as String?,
     minuteIncrements: json['minute_increments'] as int?,
-    minLeadHours: (json['min_lead_hours'] as num?)?.toDouble(),
+    minLeadHours: json['min_lead_hours'] as int?,
     maxLeadDays: json['max_lead_days'] as int?,
     website: json['website'] as String?,
   );

@@ -1,6 +1,6 @@
+import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
 import 'package:easy_wellness_biz_app/widgets/weekly_schedule_settings/weekly_schedule.model.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
 
 part 'db_place.model.g.dart';
 
@@ -40,7 +40,7 @@ class DbPlace {
 
   /// The allowed minimum of hours in advance the appointment can be booked.
   @JsonKey(name: 'min_lead_hours')
-  final double? minLeadHours;
+  final int? minLeadHours;
 
   /// The allowed maximum of days in advance the appointment can be booked.
   @JsonKey(name: 'max_lead_days')
