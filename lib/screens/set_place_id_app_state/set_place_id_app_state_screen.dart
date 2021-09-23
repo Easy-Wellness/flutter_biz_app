@@ -164,11 +164,15 @@ class _SearchablePlaceListViewState extends State<SearchablePlaceListView> {
               .toList());
       },
       body: widget.places.isEmpty
-          ? const Center(
-              child: Text(
-              "You have no business places, start creating one by clicking the ➕ icon",
-              textAlign: TextAlign.center,
-            ))
+          ? Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: const Center(
+                child: Text(
+                  "You have no business places, start creating one by clicking the ➕ icon at the top right corner of the screen.",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
           : placesToShow!.isEmpty
               ? const Center(child: Text('No results found 🥺'))
               : Scrollbar(
