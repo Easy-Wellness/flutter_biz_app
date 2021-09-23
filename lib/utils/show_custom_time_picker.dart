@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 void showCustomTimePicker({
   required BuildContext context,
   required int initialTimeInSecs,
+  bool use24hFormat = false,
 
   /// The number of seconds from midnight 12:00 AM
   required void Function(int) onTimeChanged,
@@ -38,6 +39,7 @@ void showCustomTimePicker({
                 child: CupertinoDatePicker(
                   mode: CupertinoDatePickerMode.time,
                   minuteInterval: 5,
+                  use24hFormat: use24hFormat,
                   initialDateTime:
                       today.add(Duration(seconds: initialTimeInSecs)),
                   onDateTimeChanged: (newDateTime) {
