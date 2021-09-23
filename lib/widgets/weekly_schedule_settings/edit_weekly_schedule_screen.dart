@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../custom_switch.dart';
 import 'seconds_to_friendly_time.dart';
-import 'show_custom_time_picker.dart';
+import '../../utils/show_custom_time_picker.dart';
 import 'weekly_schedule.model.dart';
 
 class EditWeeklyScheduleScreen extends StatelessWidget {
@@ -33,13 +33,13 @@ class EditWeeklyScheduleScreen extends StatelessWidget {
                       Provider.of<_WeeklyScheduleNotifier>(ctx, listen: false);
                   if (!observable.everyIntervalIsValid()) {
                     _showErrDialog(ctx,
-                        'The schedule is not correct. Please remove the opening time that comes after the closing time.');
+                        'The schedule is not correct. Please remove the time period with the opening time that comes after the closing time.');
                     return;
                   }
                   observable.saveAll();
                   if (!observable.entireScheduleIsValid()) {
                     _showErrDialog(ctx,
-                        'The schedule is not correct. Please check for overlapping time periods or a time period that immediately comes after another time period.');
+                        'The schedule is not correct. Please check for overlapping time periods or merge two time periods that just touch each other into one.');
                     return;
                   }
                   Navigator.pop(ctx, observable.getSchedule());

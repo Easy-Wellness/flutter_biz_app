@@ -164,7 +164,7 @@ class _BodyState extends State<Body> {
                                   .erroredFields.first.focusNode
                                   .requestFocus();
                           },
-                          child: Text('Done'),
+                          child: const Text('Save'),
                         ),
                       )
                     ].expand((widget) => [widget, const SizedBox(height: 16)])

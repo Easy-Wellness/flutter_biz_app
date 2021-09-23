@@ -180,6 +180,7 @@ class _StreetAddressFormFieldState extends State<StreetAddressFormField> {
             helperText: '',
             suffixIcon: Icon(Icons.chevron_right),
             hintText: businessLocation?.address,
+            hintStyle: const TextStyle(color: Color(0xdd000000)),
           ),
         ),
       ),
