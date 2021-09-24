@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
-import 'package:easy_wellness_biz_app/screens/settings/change_default_scheduling_policy_screen.dart';
-import 'package:easy_wellness_biz_app/screens/settings/edit_business_info_screen.dart';
 import 'package:easy_wellness_biz_app/utils/navigate_to_root_screen.dart';
 import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';
 import 'package:easy_wellness_biz_app/widgets/custom_bottom_nav_bar.dart';
@@ -11,7 +9,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SettingsScreen extends StatelessWidget {
+import 'change_default_scheduling_policy_screen.dart';
+import 'edit_business_info_screen.dart';
+
+class SettingListScreen extends StatelessWidget {
   static const String routeName = '/settings';
 
   @override

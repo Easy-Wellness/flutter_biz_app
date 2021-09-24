@@ -8,7 +8,7 @@ import 'routes.dart';
 import 'screens/loading/loading_screen.dart';
 import 'screens/login/login_screen.dart';
 import 'screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
-import 'screens/settings/settings_screen.dart';
+import 'screens/setting_list/setting_list_screen.dart';
 import 'theme.dart';
 import 'utils/navigate_to_root_screen.dart';
 
@@ -55,9 +55,9 @@ class _AppState extends State<App> {
                       ? navigatorKey.currentState!.pushReplacementNamed(
                           SetPlaceIdAppStateScreen.routeName)
                       : navigatorKey.currentState!.pushReplacementNamed(
-                          SettingsScreen.routeName,
+                          SettingListScreen.routeName,
                           arguments: {
-                            'rootScreenIndex': RootScreen.settingsScreen.index
+                            'rootScreenIndex': RootScreen.settingListScreen.index
                           },
                         );
               });

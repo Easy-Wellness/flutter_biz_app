@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'screens/chat_list/chat_list_screen.dart';
 import 'screens/error/error_screen.dart';
 import 'screens/event_calendar/event_calendar_screen.dart';
 import 'screens/loading/loading_screen.dart';
 import 'screens/login/login_screen.dart';
+import 'screens/service_list/service_list_screen.dart';
 import 'screens/set_place_id_app_state/create_business_place_screen.dart';
 import 'screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
-import 'screens/settings/change_default_scheduling_policy_screen.dart';
-import 'screens/settings/edit_business_info_screen.dart';
-import 'screens/settings/settings_screen.dart';
+import 'screens/setting_list/change_default_scheduling_policy_screen.dart';
+import 'screens/setting_list/edit_business_info_screen.dart';
+import 'screens/setting_list/setting_list_screen.dart';
 import 'widgets/pick_location_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
@@ -24,8 +26,14 @@ final Map<String, WidgetBuilder> routes = {
   /// Sub-screens of the root Event Calendar Screen
   EventCalendarScreen.routeName: (_) => EventCalendarScreen(),
 
+  /// Sub-screens of the root Service List Screen
+  ServiceListScreen.routeName: (_) => ServiceListScreen(),
+
+  /// Sub-screens of the root Chat List Screen
+  ChatListScreen.routeName: (_) => ChatListScreen(),
+
   /// Sub-screens of the root Settings Screen
-  SettingsScreen.routeName: (_) => SettingsScreen(),
+  SettingListScreen.routeName: (_) => SettingListScreen(),
   EditBusinessInfoScreen.routeName: (_) => EditBusinessInfoScreen(),
   ChangeDefaultSchedulingPolicyScreen.routeName: (_) =>
       ChangeDefaultSchedulingPolicyScreen(),

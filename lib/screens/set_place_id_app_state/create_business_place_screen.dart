@@ -112,7 +112,7 @@ class _BodyState extends State<Body> {
                                 listen: false)
                             .businessPlaceId = businessLocation!.placeId;
                         navigateToRootScreen(
-                            context, RootScreen.settingsScreen);
+                            context, RootScreen.settingListScreen);
                         showCustomSnackBar(
                             context, 'Welcome to your new business place');
                       } else

@@ -29,6 +29,16 @@ class CustomBottomNavBar extends StatelessWidget {
             activeIcon: Icon(Icons.event_note),
           ),
           BottomNavigationBarItem(
+            label: 'Services',
+            icon: Icon(Icons.home_repair_service_outlined),
+            activeIcon: Icon(Icons.home_repair_service),
+          ),
+          BottomNavigationBarItem(
+            label: 'Chats',
+            icon: Icon(Icons.chat_outlined),
+            activeIcon: Icon(Icons.chat),
+          ),
+          BottomNavigationBarItem(
             label: 'Settings',
             icon: Icon(Icons.settings_outlined),
             activeIcon: Icon(Icons.settings),

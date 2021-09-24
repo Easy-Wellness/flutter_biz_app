@@ -209,7 +209,7 @@ class _SearchablePlaceListViewState extends State<SearchablePlaceListView> {
                                     listen: false)
                                 .businessPlaceId = placesToShow![idx].id;
                             navigateToRootScreen(
-                                context, RootScreen.settingsScreen);
+                                context, RootScreen.settingListScreen);
                           },
                           child: const Text('View'),
                           style:
