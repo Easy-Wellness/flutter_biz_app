@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'change_default_scheduling_policy_screen.dart';
+import 'change_scheduling_policy_screen.dart';
 import 'edit_business_info_screen.dart';
 
 class SettingListScreen extends StatelessWidget {
@@ -49,7 +49,7 @@ class SettingListScreen extends StatelessWidget {
             ),
             TextButton.icon(
               onPressed: () => Navigator.pushNamed(
-                  context, ChangeDefaultSchedulingPolicyScreen.routeName),
+                  context, ChangeSchedulingPolicyScreen.routeName),
               icon: Icon(Icons.book_online_outlined),
               label: Text('Change default scheduling policy'),
             ),

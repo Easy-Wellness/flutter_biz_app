@@ -9,10 +9,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class ChangeDefaultSchedulingPolicyScreen extends StatelessWidget {
-  const ChangeDefaultSchedulingPolicyScreen({Key? key}) : super(key: key);
+class ChangeSchedulingPolicyScreen extends StatelessWidget {
+  const ChangeSchedulingPolicyScreen({Key? key}) : super(key: key);
 
-  static const String routeName = '/change_default_scheduling_policy';
+  static const String routeName = '/change_scheduling_policy';
 
   @override
   Widget build(BuildContext context) {

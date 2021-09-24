@@ -8,7 +8,7 @@ import 'screens/login/login_screen.dart';
 import 'screens/service_list/service_list_screen.dart';
 import 'screens/set_place_id_app_state/create_business_place_screen.dart';
 import 'screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
-import 'screens/setting_list/change_default_scheduling_policy_screen.dart';
+import 'screens/setting_list/change_scheduling_policy_screen.dart';
 import 'screens/setting_list/edit_business_info_screen.dart';
 import 'screens/setting_list/setting_list_screen.dart';
 import 'widgets/pick_location_screen.dart';
@@ -35,6 +35,6 @@ final Map<String, WidgetBuilder> routes = {
   /// Sub-screens of the root Settings Screen
   SettingListScreen.routeName: (_) => SettingListScreen(),
   EditBusinessInfoScreen.routeName: (_) => EditBusinessInfoScreen(),
-  ChangeDefaultSchedulingPolicyScreen.routeName: (_) =>
-      ChangeDefaultSchedulingPolicyScreen(),
+  ChangeSchedulingPolicyScreen.routeName: (_) =>
+      ChangeSchedulingPolicyScreen(),
 };
