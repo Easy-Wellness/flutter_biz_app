@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:easy_wellness_biz_app/constants/misc.dart';
 import 'package:easy_wellness_biz_app/models/location/geo_position.model.dart';
 import 'package:easy_wellness_biz_app/models/nearby_service/db_nearby_service.model.dart';
@@ -18,8 +19,7 @@ Future<void> seedPlacesAndServices() async {
   final places = await findNearbyPlaces();
   print('Seeding ${places.length} places and services for each...');
   await Future.wait(places.map((place) async {
-    final clinicName = await _getFakeClinicName();
-    GeoFirePoint location = geo.point(
+    final GeoFirePoint location = geo.point(
       latitude: place.geometry.location.lat,
       longitude: place.geometry.location.lng,
     );
@@ -36,6 +36,7 @@ Future<void> seedPlacesAndServices() async {
       geohash: location.data['geohash'],
       geopoint: location.data['geopoint'],
     );
+    final clinicName = await _getFakePropertyValue('Hospital');
     await placeRef
         .withConverter<DbPlace>(
           fromFirestore: (snapshot, _) => DbPlace.fromJson(snapshot.data()!),
@@ -54,13 +55,19 @@ Future<void> seedPlacesAndServices() async {
           minLeadHours: 24,
           maxLeadDays: 365,
         ));
+    final nameList = await Future.wait(
+        specialties.map((_) => _getFakePropertyValue('Company Name')));
+    final descriptionList = await Future.wait(
+        specialties.map((_) => _getFakePropertyValue('Sandwhich Description')));
     await Future.wait(
-      specialties.map(
-        (specialty) => servicesRef.add(DbNearbyService(
+      specialties.mapIndexed(
+        (index, specialty) => servicesRef.add(DbNearbyService(
           rating: place.rating,
           ratingsTotal: place.userRatingsTotal,
+          duration: 60,
+          description: descriptionList[index],
           specialty: specialty,
-          serviceName: specialty,
+          serviceName: nameList[index],
           placeName: clinicName,
           placeId: place.placeId,
           address: address,
@@ -72,17 +79,17 @@ Future<void> seedPlacesAndServices() async {
   print('All done!');
 }
 
-Future<String> _getFakeClinicName() async {
+Future<String> _getFakePropertyValue(String property) async {
   final fakerAPI = Uri.https(
     'fakercloud.com',
     '/schemas/property',
   );
-  final response = await http.post(fakerAPI, body: {'name': 'Hospital'});
+  final response = await http.post(fakerAPI, body: {'name': property});
   if (response.statusCode == 200)
     return jsonDecode(response.body)['results'][0] as String;
   else
     throw HttpException(
-      'Failed to find nearby places',
+      'Failed to get data from Faker Cloud',
       uri: fakerAPI,
     );
 }

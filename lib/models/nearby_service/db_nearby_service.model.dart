@@ -13,12 +13,16 @@ class DbNearbyService {
     required this.placeName,
     required this.placeId,
     required this.address,
+    required this.description,
+    required this.duration,
     required this.geoPosition,
   });
 
   final String specialty;
   final String address;
+  final String description;
   final double rating;
+  final int duration;
 
   @JsonKey(name: 'ratings_total')
   final int ratingsTotal;
