@@ -168,7 +168,7 @@ class _SearchablePlaceListViewState extends State<SearchablePlaceListView> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: const Center(
                 child: Text(
-                  "You have no business places, start creating one by clicking the ➕ icon at the top right corner of the screen.",
+                  "You have no business places, start creating one by tapping the ➕ icon at the top right corner of the screen.",
                   textAlign: TextAlign.center,
                 ),
               ),
