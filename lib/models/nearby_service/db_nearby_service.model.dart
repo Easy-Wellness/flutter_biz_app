@@ -10,6 +10,7 @@ class DbNearbyService {
     required this.ratingsTotal,
     required this.specialty,
     required this.serviceName,
+    required this.priceTag,
     required this.placeName,
     required this.placeId,
     required this.address,
@@ -30,6 +31,9 @@ class DbNearbyService {
   @JsonKey(name: 'service_name', defaultValue: '')
   final String serviceName;
 
+  @JsonKey(name: 'price_tag')
+  final PriceTag priceTag;
+
   @JsonKey(name: 'geo_position')
   final GeoPosition geoPosition;
 
@@ -44,4 +48,30 @@ class DbNearbyService {
       _$DbNearbyServiceFromJson(json);
 
   Map<String, dynamic> toJson() => _$DbNearbyServiceToJson(this);
+}
+
+@JsonSerializable(anyMap: true, explicitToJson: true)
+class PriceTag {
+  PriceTag({
+    required this.type,
+    this.value,
+  });
+
+  final PriceType type;
+  final int? value;
+
+  factory PriceTag.fromJson(Map<String, dynamic> json) =>
+      _$PriceTagFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PriceTagToJson(this);
+}
+
+enum PriceType {
+  fixed,
+  startingAt,
+  hourly,
+  free,
+  varies,
+  contactUs,
+  notSet,
 }

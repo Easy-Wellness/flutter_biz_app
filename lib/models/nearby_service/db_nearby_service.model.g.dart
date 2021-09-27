@@ -12,6 +12,8 @@ DbNearbyService _$DbNearbyServiceFromJson(Map json) {
     ratingsTotal: json['ratings_total'] as int,
     specialty: json['specialty'] as String,
     serviceName: json['service_name'] as String? ?? '',
+    priceTag:
+        PriceTag.fromJson(Map<String, dynamic>.from(json['price_tag'] as Map)),
     placeName: json['place_name'] as String? ?? '',
     placeId: json['place_id'] as String? ?? '',
     address: json['address'] as String,
@@ -31,7 +33,56 @@ Map<String, dynamic> _$DbNearbyServiceToJson(DbNearbyService instance) =>
       'duration': instance.duration,
       'ratings_total': instance.ratingsTotal,
       'service_name': instance.serviceName,
+      'price_tag': instance.priceTag.toJson(),
       'geo_position': instance.geoPosition.toJson(),
       'place_id': instance.placeId,
       'place_name': instance.placeName,
     };
+
+PriceTag _$PriceTagFromJson(Map json) {
+  return PriceTag(
+    type: _$enumDecode(_$PriceTypeEnumMap, json['type']),
+    value: json['value'] as int?,
+  );
+}
+
+Map<String, dynamic> _$PriceTagToJson(PriceTag instance) => <String, dynamic>{
+      'type': _$PriceTypeEnumMap[instance.type],
+      'value': instance.value,
+    };
+
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
+  }
+
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
+}
+
+const _$PriceTypeEnumMap = {
+  PriceType.fixed: 'fixed',
+  PriceType.startingAt: 'startingAt',
+  PriceType.hourly: 'hourly',
+  PriceType.free: 'free',
+  PriceType.varies: 'varies',
+  PriceType.contactUs: 'contactUs',
+  PriceType.notSet: 'notSet',
+};

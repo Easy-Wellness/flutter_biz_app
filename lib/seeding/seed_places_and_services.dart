@@ -57,17 +57,17 @@ Future<void> seedPlacesAndServices() async {
         ));
     final nameList = await Future.wait(
         specialties.map((_) => _getFakePropertyValue('Company Name')));
-    final descriptionList = await Future.wait(
-        specialties.map((_) => _getFakePropertyValue('Sandwhich Description')));
     await Future.wait(
       specialties.mapIndexed(
         (index, specialty) => servicesRef.add(DbNearbyService(
           rating: place.rating,
           ratingsTotal: place.userRatingsTotal,
           duration: 60,
-          description: descriptionList[index],
+          description:
+              'This sandwich can be made in a pan. Margarine on the outside, pizza sauce and fillings on the inside. The term "pudgy pie" is sometimes used to refer to pie irons, a gadget used for campfire cooking.',
           specialty: specialty,
           serviceName: nameList[index],
+          priceTag: PriceTag(type: PriceType.notSet),
           placeName: clinicName,
           placeId: place.placeId,
           address: address,
