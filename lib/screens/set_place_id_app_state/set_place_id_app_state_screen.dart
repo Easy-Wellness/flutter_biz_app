@@ -147,7 +147,7 @@ class _SearchablePlaceListViewState extends State<SearchablePlaceListView> {
       ),
       hint: 'Search by address (district 1 or quan 1) ...',
       onQueryChanged: (query) {
-        final cleanQuery = query;
+        final cleanQuery = removeDiacriticsFromString(query);
         if (cleanQuery.isEmpty)
           return setState(() => placesToShow = widget.places);
         if (cleanQuery.isNotEmpty)
@@ -156,7 +156,7 @@ class _SearchablePlaceListViewState extends State<SearchablePlaceListView> {
                   removeDiacriticsFromString(snapshot.data().address.trim())
                       .contains(
                     RegExp(
-                      r'' + removeDiacriticsFromString(cleanQuery),
+                      r'' + cleanQuery,
                       caseSensitive: false,
                       unicode: true,
                     ),

@@ -5,6 +5,7 @@ import 'screens/error/error_screen.dart';
 import 'screens/event_calendar/event_calendar_screen.dart';
 import 'screens/loading/loading_screen.dart';
 import 'screens/login/login_screen.dart';
+import 'screens/service_list/save_service_screen.dart';
 import 'screens/service_list/service_list_screen.dart';
 import 'screens/set_place_id_app_state/create_business_place_screen.dart';
 import 'screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
@@ -28,6 +29,7 @@ final Map<String, WidgetBuilder> routes = {
 
   /// Sub-screens of the root Service List Screen
   ServiceListScreen.routeName: (_) => ServiceListScreen(),
+  SaveServiceScreen.routeName: (_) => SaveServiceScreen(),
 
   /// Sub-screens of the root Chat List Screen
   ChatListScreen.routeName: (_) => ChatListScreen(),

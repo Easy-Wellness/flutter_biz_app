@@ -10,6 +10,8 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 
+import 'save_service_screen.dart';
+
 class ServiceListScreen extends StatelessWidget {
   const ServiceListScreen({Key? key}) : super(key: key);
 
@@ -25,7 +27,8 @@ class ServiceListScreen extends StatelessWidget {
         floatingActionButton: Padding(
             padding: const EdgeInsets.only(top: 8),
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () =>
+                  Navigator.pushNamed(context, SaveServiceScreen.routeName),
               child: Icon(Icons.add),
             )),
         body: SafeArea(
@@ -145,7 +148,7 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
         child: SizedBox(
           width: 300,
           child: Text(
-            'Search by name ...',
+            "Search by service's name ...",
             textAlign: TextAlign.left,
             style: TextStyle(
               color: const Color(0x99000000),
@@ -156,9 +159,9 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
           ),
         ),
       ),
-      hint: 'Search by name ...',
+      hint: "Search by service's name ...",
       onQueryChanged: (query) {
-        final cleanQuery = query;
+        final cleanQuery = removeDiacriticsFromString(query);
         if (cleanQuery.isEmpty)
           return setState(() => servicesToShow = widget.services);
         if (cleanQuery.isNotEmpty)
@@ -167,7 +170,7 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                   removeDiacriticsFromString(snapshot.data().serviceName.trim())
                       .contains(
                     RegExp(
-                      r'' + removeDiacriticsFromString(cleanQuery),
+                      r'' + cleanQuery,
                       caseSensitive: false,
                       unicode: true,
                     ),
@@ -245,16 +248,31 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                             ),
                           ],
                         ),
-                        trailing: PopupMenuButton(
+                        trailing: PopupMenuButton<MoreOption>(
                           icon: const Icon(Icons.more_horiz),
                           offset: const Offset(0, 40),
+                          onSelected: (option) {
+                            switch (option) {
+                              case MoreOption.edit:
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => SaveServiceScreen(
+                                      serviceId: servicesToShow![idx].id,
+                                      initialData: service,
+                                    ),
+                                  ),
+                                );
+                                break;
+                              case MoreOption.seeReviews:
+                            }
+                          },
                           itemBuilder: (_) => [
                             PopupMenuItem(
-                              onTap: () {},
+                              value: MoreOption.edit,
                               child: Text('View & Edit'),
                             ),
                             PopupMenuItem(
-                              onTap: () {},
+                              value: MoreOption.seeReviews,
                               child: Text('See all reviews'),
                             ),
                           ],
@@ -267,3 +285,5 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
     );
   }
 }
+
+enum MoreOption { edit, seeReviews }
