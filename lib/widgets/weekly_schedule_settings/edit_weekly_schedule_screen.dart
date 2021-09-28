@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/show_custom_time_picker.dart';
 import '../custom_switch.dart';
 import 'seconds_to_friendly_time.dart';
-import '../../utils/show_custom_time_picker.dart';
 import 'weekly_schedule.model.dart';
 
 class EditWeeklyScheduleScreen extends StatelessWidget {
@@ -27,7 +27,7 @@ class EditWeeklyScheduleScreen extends StatelessWidget {
           title: Text(titleText),
           actions: [
             Builder(
-              builder: (ctx) => IconButton(
+              builder: (ctx) => TextButton.icon(
                 onPressed: () {
                   final observable =
                       Provider.of<_WeeklyScheduleNotifier>(ctx, listen: false);
@@ -44,7 +44,9 @@ class EditWeeklyScheduleScreen extends StatelessWidget {
                   }
                   Navigator.pop(ctx, observable.getSchedule());
                 },
-                icon: Icon(Icons.check),
+                style: TextButton.styleFrom(primary: Colors.black87),
+                icon: Text('Save'),
+                label: Icon(Icons.check),
               ),
             ),
           ],
