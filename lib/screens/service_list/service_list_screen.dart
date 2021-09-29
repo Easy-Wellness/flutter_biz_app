@@ -284,6 +284,12 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                 ),
     );
   }
+
+  @override
+  void didUpdateWidget(covariant SearchableServiceListView oldWidget) {
+    servicesToShow = widget.services;
+    super.didUpdateWidget(oldWidget);
+  }
 }
 
 enum MoreOption { edit, seeReviews }

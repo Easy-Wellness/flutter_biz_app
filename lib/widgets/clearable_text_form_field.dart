@@ -258,8 +258,8 @@ class _ClearableTextFormFieldState extends FormFieldState<String> {
   /// Invoked by the clear suffix icon to clear everything in the [FormField]
   void clear() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _effectiveController.clear();
       didChange(null);
+      _effectiveController.clear();
     });
   }
 }

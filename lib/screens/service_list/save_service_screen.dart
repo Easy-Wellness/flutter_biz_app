@@ -233,7 +233,7 @@ class _ServiceFormFieldsState extends State<ServiceFormFields> {
                       suffixIcon: Icon(Icons.watch_later_outlined),
                       errorText: field.errorText,
                       helperText:
-                          'The expected duration for this service is ${infoText == '' ? '_ ' : infoText}.',
+                          'The maximum duration for this service is ${infoText == '' ? '_ ' : infoText}.',
                     ),
                   ),
                 ),
