@@ -54,11 +54,11 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  Future<QuerySnapshot<DbNearbyService>>? querySnapshot;
+  Stream<QuerySnapshot<DbNearbyService>>? queryStream;
 
   @override
   void initState() {
-    querySnapshot = FirebaseFirestore.instance
+    queryStream = FirebaseFirestore.instance
         .collection('places')
         .doc(widget.placeId)
         .collection('services')
@@ -67,7 +67,7 @@ class _BodyState extends State<Body> {
               DbNearbyService.fromJson(snapshot.data()!),
           toFirestore: (service, _) => service.toJson(),
         )
-        .get();
+        .snapshots();
     super.initState();
   }
 
@@ -92,12 +92,12 @@ class _BodyState extends State<Body> {
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: FutureBuilder<QuerySnapshot<DbNearbyService>>(
-              future: querySnapshot,
+            child: StreamBuilder<QuerySnapshot<DbNearbyService>>(
+              stream: queryStream,
               builder: (_, snapshot) {
                 if (snapshot.hasError)
                   return const Center(child: Text('Something went wrong 😞'));
-                if (!snapshot.hasData)
+                if (snapshot.connectionState == ConnectionState.waiting)
                   return const Center(
                       child: CircularProgressIndicator.adaptive());
                 return SearchableServiceListView(services: snapshot.data!.docs);

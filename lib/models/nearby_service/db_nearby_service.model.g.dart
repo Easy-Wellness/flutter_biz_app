@@ -21,6 +21,9 @@ DbNearbyService _$DbNearbyServiceFromJson(Map json) {
     duration: json['duration'] as int,
     geoPosition: GeoPosition.fromJson(
         Map<String, dynamic>.from(json['geo_position'] as Map)),
+    minuteIncrements: json['minute_increments'] as int?,
+    minLeadHours: json['min_lead_hours'] as int?,
+    maxLeadDays: json['max_lead_days'] as int?,
   );
 }
 
@@ -31,6 +34,9 @@ Map<String, dynamic> _$DbNearbyServiceToJson(DbNearbyService instance) =>
       'description': instance.description,
       'rating': instance.rating,
       'duration': instance.duration,
+      'minute_increments': instance.minuteIncrements,
+      'min_lead_hours': instance.minLeadHours,
+      'max_lead_days': instance.maxLeadDays,
       'ratings_total': instance.ratingsTotal,
       'service_name': instance.serviceName,
       'price_tag': instance.priceTag.toJson(),

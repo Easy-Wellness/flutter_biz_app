@@ -17,6 +17,9 @@ class DbNearbyService {
     required this.description,
     required this.duration,
     required this.geoPosition,
+    required this.minuteIncrements,
+    required this.minLeadHours,
+    required this.maxLeadDays,
   });
 
   final String specialty;
@@ -24,6 +27,19 @@ class DbNearbyService {
   final String description;
   final double rating;
   final int duration;
+
+  /// The minutes between two bookings. The value is always <=24 hours
+  /// (= 1440 mins).
+  @JsonKey(name: 'minute_increments')
+  final int? minuteIncrements;
+
+  /// The allowed minimum of hours in advance the appointment can be booked.
+  @JsonKey(name: 'min_lead_hours')
+  final int? minLeadHours;
+
+  /// The allowed maximum of days in advance the appointment can be booked.
+  @JsonKey(name: 'max_lead_days')
+  final int? maxLeadDays;
 
   @JsonKey(name: 'ratings_total')
   final int ratingsTotal;

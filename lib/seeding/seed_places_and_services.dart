@@ -72,6 +72,9 @@ Future<void> seedPlacesAndServices() async {
           placeId: place.placeId,
           address: address,
           geoPosition: geoPos,
+          minuteIncrements: 30,
+          minLeadHours: 24,
+          maxLeadDays: 365,
         )),
       ),
     );
