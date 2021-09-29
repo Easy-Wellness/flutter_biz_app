@@ -3,9 +3,8 @@ import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/utils/form_validation_manager.dart';
 import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';
-import 'package:easy_wellness_biz_app/utils/show_custom_time_picker.dart';
+import 'package:easy_wellness_biz_app/widgets/scheduling_policy_form_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -43,8 +42,6 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final formKey = GlobalKey<FormState>();
   final formValidationManager = FormValidationManager();
-  final minLeadController = TextEditingController();
-  final maxLeadController = TextEditingController();
   Future<DocumentSnapshot<DbPlace>>? docSnapshot;
 
   int minuteIncrements = 0;
@@ -75,8 +72,6 @@ class _BodyState extends State<Body> {
           return Center(child: const CircularProgressIndicator.adaptive());
         final placeId = snapshot.data!.id;
         final place = snapshot.data!.data()!;
-        minLeadController.text = place.minLeadHours.toString();
-        maxLeadController.text = place.maxLeadDays.toString();
         return Form(
           key: formKey,
           child: Scrollbar(
@@ -86,123 +81,15 @@ class _BodyState extends State<Body> {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    FormField<int>(
-                      initialValue: place.minuteIncrements!,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      onSaved: (minutes) => minuteIncrements = minutes!,
-                      // field's value is always in the unit of minutes
-                      builder: (field) {
-                        final duration = Duration(minutes: field.value!);
-                        final hours = duration.inHours;
-                        final hoursText = hours >= 1 ? '$hours hour(s) ' : '';
-                        final minutes = duration.inMinutes.remainder(60);
-                        final minutesText =
-                            minutes == 0 ? '' : '$minutes minutes';
-                        final infoText = hoursText + minutesText;
-                        return MaterialButton(
-                          padding: const EdgeInsets.all(0),
-                          onPressed: () {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            showCustomTimePicker(
-                              context: context,
-                              use24hFormat: true,
-                              initialTimeInSecs: duration.inSeconds,
-                              onTimeChanged: (seconds) =>
-                                  field.didChange(seconds ~/ 60),
-                            );
-                          },
-                          child: AbsorbPointer(
-                            child: TextField(
-                              readOnly: true,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(),
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                label: const Text('Time increments'),
-                                hintText: infoText,
-                                hintStyle:
-                                    const TextStyle(color: Color(0xdd000000)),
-                                helperText:
-                                    'Bookings will show up in increments of $infoText.',
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 32),
-                    FormField<int>(
-                      initialValue: place.minLeadHours!,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: formValidationManager
-                          .wrapValidator('minLeadTime', (value) {
-                        if (value == null)
-                          return '''Minimum lead time is required.
-                          ''';
-                        if (value == 0)
-                          return '''Time is not valid.
-                          ''';
-                      }),
-                      onSaved: (hours) => minLeadHours = hours!,
-                      // field's value is always in the unit of hours
-                      builder: (field) => TextField(
-                        controller: minLeadController,
-                        onChanged: (numbText) {
-                          if (numbText.isEmpty) return field.didChange(null);
-                          field.didChange(int.parse(numbText));
-                        },
-                        focusNode: formValidationManager
-                            .getFocusNodeForField('minLeadTime'),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(3),
-                        ],
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          label: const Text('Minimum lead time'),
-                          suffix: Text('hour(s)'),
-                          errorText: field.errorText,
-                          helperText:
-                              'Customers must book, reschedule, or cancel appointments more than ${field.value} hour(s) in advance.',
-                          helperMaxLines: 2,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    FormField<int>(
-                      initialValue: place.maxLeadDays,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: formValidationManager
-                          .wrapValidator('maxLeadTime', (value) {
-                        if (value == null)
-                          return 'Maximum lead time is required.';
-                        if (value == 0) return 'Time is not valid.';
-                      }),
-                      onSaved: (days) => maxLeadDays = days!,
-                      // field's value is always in the unit of hours
-                      builder: (field) => TextField(
-                        controller: maxLeadController,
-                        onChanged: (numbText) {
-                          if (numbText.isEmpty) return field.didChange(null);
-                          field.didChange(int.parse(numbText));
-                        },
-                        focusNode: formValidationManager
-                            .getFocusNodeForField('maxLeadTime'),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(3),
-                        ],
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          label: const Text('Maximum lead time'),
-                          suffix: Text('day(s)'),
-                          errorText: field.errorText,
-                          helperText:
-                              'Customers will not be able to book over ${field.value} day(s) in advance.',
-                        ),
-                      ),
+                    SchedulingPolicyFormFields(
+                      formValidationManager: formValidationManager,
+                      initialMinuteIncrements: place.minuteIncrements,
+                      initialMinLeadHours: place.minLeadHours,
+                      initialMaxLeadDays: place.maxLeadDays,
+                      onMinuteIncrementsSaved: (minutes) =>
+                          minuteIncrements = minutes!,
+                      onMinLeadHoursSaved: (hours) => minLeadHours = hours!,
+                      onMaxLeadDaysSaved: (days) => maxLeadDays = days!,
                     ),
                     const SizedBox(height: 32),
                     Container(
@@ -237,12 +124,5 @@ class _BodyState extends State<Body> {
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    minLeadController.dispose();
-    maxLeadController.dispose();
-    super.dispose();
   }
 }
