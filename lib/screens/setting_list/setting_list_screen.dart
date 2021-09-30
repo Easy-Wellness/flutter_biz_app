@@ -67,7 +67,7 @@ class SettingListScreen extends StatelessWidget {
                 builder: (_) => AlertDialog(
                   title: const Text('Permanently delete this business place?'),
                   content: Text(
-                      'After you delete a business, all of its assets are permanently deleted (bookings, services, chats, etc.) and cannot be recovered.'),
+                      'After you delete a business, you will lose access to all of its assets (bookings, services, chats, etc.). This action cannot be undone.'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
