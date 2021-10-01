@@ -158,10 +158,12 @@ class _StreetAddressFormFieldState extends State<StreetAddressFormField> {
       padding: const EdgeInsets.all(0),
       onPressed: () async {
         FocusManager.instance.primaryFocus?.unfocus();
-        final location =
-            await Navigator.pushNamed(context, PickLocationScreen.routeName);
+        final location = await Navigator.push(
+          context,
+          MaterialPageRoute<GeoLocation>(builder: (_) => PickLocationScreen()),
+        );
         if (location != null && mounted)
-          setState(() => businessLocation = location as GeoLocation);
+          setState(() => businessLocation = location);
       },
       child: AbsorbPointer(
         child: TextFormField(

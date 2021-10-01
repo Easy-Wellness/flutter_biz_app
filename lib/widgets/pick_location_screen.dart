@@ -7,8 +7,6 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 /// Return a geographic location picked by the user from a list of autocomplete
 /// suggestions for location
 class PickLocationScreen extends StatelessWidget {
-  static const String routeName = '/pick_location';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
