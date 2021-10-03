@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_wellness_biz_app/constants/misc.dart';
@@ -9,9 +6,9 @@ import 'package:easy_wellness_biz_app/models/nearby_service/db_nearby_service.mo
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/services/gmp_service/find_nearby_places.service.dart';
 import 'package:easy_wellness_biz_app/widgets/weekly_schedule_settings/edit_weekly_schedule_screen.dart';
+import 'package:faker/faker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
-import 'package:http/http.dart' as http;
 
 Future<void> seedPlacesAndServices() async {
   final geo = Geoflutterfire();
@@ -36,7 +33,8 @@ Future<void> seedPlacesAndServices() async {
       geohash: location.data['geohash'],
       geopoint: location.data['geopoint'],
     );
-    final clinicName = await _getFakePropertyValue('Hospital');
+    final faker = Faker();
+    final clinicName = faker.company.name();
     await placeRef
         .withConverter<DbPlace>(
           fromFirestore: (snapshot, _) => DbPlace.fromJson(snapshot.data()!),
@@ -55,8 +53,7 @@ Future<void> seedPlacesAndServices() async {
           minLeadHours: 24,
           maxLeadDays: 365,
         ));
-    final nameList = await Future.wait(
-        specialties.map((_) => _getFakePropertyValue('Company Name')));
+    final nameList = specialties.map((_) => faker.food.restaurant()).toList();
     await Future.wait(
       specialties.mapIndexed(
         (index, specialty) => servicesRef.add(DbNearbyService(
@@ -80,19 +77,4 @@ Future<void> seedPlacesAndServices() async {
     );
   }));
   print('All done!');
-}
-
-Future<String> _getFakePropertyValue(String property) async {
-  final fakerAPI = Uri.https(
-    'fakercloud.com',
-    '/schemas/property',
-  );
-  final response = await http.post(fakerAPI, body: {'name': property});
-  if (response.statusCode == 200)
-    return jsonDecode(response.body)['results'][0] as String;
-  else
-    throw HttpException(
-      'Failed to get data from Faker Cloud',
-      uri: fakerAPI,
-    );
 }

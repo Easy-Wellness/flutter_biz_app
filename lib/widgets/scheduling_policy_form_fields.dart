@@ -51,12 +51,11 @@ class _SchedulingPolicyFormFieldsState
     return Column(
       children: [
         FormField<int>(
-          initialValue: widget.initialMinuteIncrements,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          initialValue: widget.initialMinuteIncrements ?? 15,
           onSaved: widget.onMinuteIncrementsSaved,
           // field's value is always in the unit of minutes
           builder: (field) {
-            final duration = Duration(minutes: field.value!);
+            final duration = Duration(minutes: field.value ?? 15);
             final hours = duration.inHours;
             final hoursText = hours >= 1 ? '$hours hour(s) ' : '';
             final minutes = duration.inMinutes.remainder(60);
