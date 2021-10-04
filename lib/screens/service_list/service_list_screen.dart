@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_wellness_biz_app/models/nearby_service/db_nearby_service.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/utils/remove_diacritics_from_string.dart';
-import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';
 import 'package:easy_wellness_biz_app/widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -265,35 +264,35 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                                 );
                                 break;
                               case MoreOption.remove:
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                    title: const Text(
-                                        'Permanently remove this service from your business?'),
-                                    content: Text(
-                                        'You will lose access to all of its data, including rating and reviews. This action cannot be undone.'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text('No'),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () async {
-                                          await FirebaseFirestore.instance
-                                              .collection('places')
-                                              .doc(service.placeId)
-                                              .collection('services')
-                                              .doc(servicesToShow![idx].id)
-                                              .delete();
-                                          showCustomSnackBar(context,
-                                              'Service is successfully removed');
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text('Yes'),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (_) => AlertDialog(
+                                //     title: const Text(
+                                //         'Permanently remove this service from your business?'),
+                                //     content: Text(
+                                //         'You will lose access to all of its data, including rating and reviews. This action cannot be undone.'),
+                                //     actions: [
+                                //       TextButton(
+                                //         onPressed: () => Navigator.pop(context),
+                                //         child: Text('No'),
+                                //       ),
+                                //       ElevatedButton(
+                                //         onPressed: () async {
+                                //           await FirebaseFirestore.instance
+                                //               .collection('places')
+                                //               .doc(service.placeId)
+                                //               .collection('services')
+                                //               .doc(servicesToShow![idx].id)
+                                //               .delete();
+                                //           showCustomSnackBar(context,
+                                //               'Service is successfully removed');
+                                //           Navigator.pop(context);
+                                //         },
+                                //         child: Text('Yes'),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // );
                                 break;
                               case MoreOption.seeReviews:
                             }
@@ -307,10 +306,10 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                               value: MoreOption.seeReviews,
                               child: Text('See all reviews'),
                             ),
-                            PopupMenuItem(
-                              value: MoreOption.remove,
-                              child: Text('Remove'),
-                            ),
+                            // PopupMenuItem(
+                            //   value: MoreOption.remove,
+                            //   child: Text('Remove'),
+                            // ),
                           ],
                         ),
                       );

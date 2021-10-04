@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
-import 'package:easy_wellness_biz_app/utils/navigate_to_root_screen.dart';
-import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';
 import 'package:easy_wellness_biz_app/widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,47 +59,47 @@ class SettingListScreen extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             const Divider(indent: 10, endIndent: 10, thickness: 1),
-            TextButton.icon(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: const Text('Permanently delete this business place?'),
-                  content: Text(
-                      'After you delete a business, you will lose access to all of its assets (bookings, services, chats, etc.). This action cannot be undone.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text('No'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final docId = Provider.of<BusinessPlaceIdNotifier>(
-                                context,
-                                listen: false)
-                            .businessPlaceId;
-                        await FirebaseFirestore.instance
-                            .collection('places')
-                            .doc(docId)
-                            .delete();
-                        navigateToRootScreen(
-                            context, RootScreen.setPlaceIdAppStateScreen);
-                        showCustomSnackBar(
-                            context, 'Business is successfully deleted');
-                        Provider.of<BusinessPlaceIdNotifier>(context,
-                                listen: false)
-                            .businessPlaceId = null;
-                      },
-                      child: Text('Yes'),
-                    ),
-                  ],
-                ),
-              ),
-              icon: Icon(Icons.domain_disabled_outlined),
-              label: Text('Permanently delete this business place'),
-              style:
-                  TextButton.styleFrom(primary: Theme.of(context).errorColor),
-            ),
-            const Divider(indent: 10, endIndent: 10, thickness: 1),
+            // TextButton.icon(
+            //   onPressed: () => showDialog(
+            //     context: context,
+            //     builder: (_) => AlertDialog(
+            //       title: const Text('Permanently delete this business place?'),
+            //       content: Text(
+            //           'After you delete a business, you will lose access to all of its assets (bookings, services, chats, etc.). This action cannot be undone.'),
+            //       actions: [
+            //         TextButton(
+            //           onPressed: () => Navigator.pop(context),
+            //           child: Text('No'),
+            //         ),
+            //         ElevatedButton(
+            //           onPressed: () async {
+            //             final docId = Provider.of<BusinessPlaceIdNotifier>(
+            //                     context,
+            //                     listen: false)
+            //                 .businessPlaceId;
+            //             await FirebaseFirestore.instance
+            //                 .collection('places')
+            //                 .doc(docId)
+            //                 .delete();
+            //             navigateToRootScreen(
+            //                 context, RootScreen.setPlaceIdAppStateScreen);
+            //             showCustomSnackBar(
+            //                 context, 'Business is successfully deleted');
+            //             Provider.of<BusinessPlaceIdNotifier>(context,
+            //                     listen: false)
+            //                 .businessPlaceId = null;
+            //           },
+            //           child: Text('Yes'),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            //   icon: Icon(Icons.domain_disabled_outlined),
+            //   label: Text('Permanently delete this business place'),
+            //   style:
+            //       TextButton.styleFrom(primary: Theme.of(context).errorColor),
+            // ),
+            // const Divider(indent: 10, endIndent: 10, thickness: 1),
             TextButton.icon(
               onPressed: () => FirebaseAuth.instance.signOut(),
               icon: Icon(Icons.logout_outlined),
