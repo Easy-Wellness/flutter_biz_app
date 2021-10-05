@@ -154,7 +154,6 @@ class _ServiceFormFieldsState extends State<ServiceFormFields> {
             ),
           ),
           DropdownSearch<String>(
-            label: 'Specialty',
             mode: Mode.MENU,
             showClearButton: true,
             showSelectedItems: true,
@@ -167,6 +166,7 @@ class _ServiceFormFieldsState extends State<ServiceFormFields> {
                 value == null ? 'Please select a specialty' : null,
             onSaved: (value) => specialty = value!,
             dropdownSearchDecoration: const InputDecoration(
+              labelText: 'Specialty',
               contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
               border: OutlineInputBorder(),
               helperText: '',
