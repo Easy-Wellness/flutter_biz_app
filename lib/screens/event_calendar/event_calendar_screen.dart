@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_wellness_biz_app/models/appointment/db_appointment.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
+import 'package:easy_wellness_biz_app/screens/chat_room_list/chat_screen.dart';
 import 'package:easy_wellness_biz_app/widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -129,7 +130,27 @@ class AppointmentListTabView extends StatelessWidget {
             primaryBtnBuilder: (_, index) => ElevatedButton.icon(
               icon: const Icon(Icons.chat_bubble_outline),
               label: const Text('Chat'),
-              onPressed: () {},
+              onPressed: () async {
+                final appt = apptList[index].data();
+                final snapshot = await FirebaseFirestore.instance
+                    .collection('chat_rooms')
+                    .where('place_id', isEqualTo: appt.placeId)
+                    .where('customer_id', isEqualTo: appt.accountId)
+                    .get();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ChatScreen(
+                      chatRoomId:
+                          snapshot.docs.isNotEmpty ? snapshot.docs[0].id : null,
+                      placeId: appt.placeId,
+                      placeName: appt.placeName,
+                      customerId: appt.accountId,
+                      customerName: appt.userProfile.fullname,
+                    ),
+                  ),
+                );
+              },
             ),
             secondaryBtnBuilder: secondaryBtnBuilder,
           );

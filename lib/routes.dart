@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/chat_list/chat_list_screen.dart';
+import 'screens/chat_room_list/chat_room_list_screen.dart';
 import 'screens/error/error_screen.dart';
 import 'screens/event_calendar/event_calendar_screen.dart';
 import 'screens/loading/loading_screen.dart';
@@ -30,7 +30,7 @@ final Map<String, WidgetBuilder> routes = {
   SaveServiceScreen.routeName: (_) => SaveServiceScreen(),
 
   /// Sub-screens of the root Chat List Screen
-  ChatListScreen.routeName: (_) => ChatListScreen(),
+  ChatRoomListScreen.routeName: (_) => ChatRoomListScreen(),
 
   /// Sub-screens of the root Settings Screen
   SettingListScreen.routeName: (_) => SettingListScreen(),

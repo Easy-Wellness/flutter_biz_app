@@ -1,4 +1,4 @@
-import 'package:easy_wellness_biz_app/screens/chat_list/chat_list_screen.dart';
+import 'package:easy_wellness_biz_app/screens/chat_room_list/chat_room_list_screen.dart';
 import 'package:easy_wellness_biz_app/screens/event_calendar/event_calendar_screen.dart';
 import 'package:easy_wellness_biz_app/screens/service_list/service_list_screen.dart';
 import 'package:easy_wellness_biz_app/screens/set_place_id_app_state/set_place_id_app_state_screen.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 enum RootScreen {
   eventCalendarScreen,
   serviceListScreen,
-  chatListScreen,
+  chatRoomListScreen,
   settingListScreen,
   // The screen below must be at the last index
   setPlaceIdAppStateScreen,
@@ -40,8 +40,8 @@ Widget _getRootScreenWidget(RootScreen rootScreen) {
       return EventCalendarScreen();
     case RootScreen.serviceListScreen:
       return ServiceListScreen();
-    case RootScreen.chatListScreen:
-      return ChatListScreen();
+    case RootScreen.chatRoomListScreen:
+      return ChatRoomListScreen();
     case RootScreen.settingListScreen:
       return SettingListScreen();
     case RootScreen.setPlaceIdAppStateScreen:
