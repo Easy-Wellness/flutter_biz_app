@@ -13,8 +13,10 @@ class ApptListView extends StatelessWidget {
   }) : super(key: key);
 
   final List<QueryDocumentSnapshot<DbAppointment>> apptList;
-  final Widget Function(BuildContext, int) primaryBtnBuilder;
-  final OutlinedButton Function(BuildContext, int)? secondaryBtnBuilder;
+  final Widget Function(BuildContext, QueryDocumentSnapshot<DbAppointment>)
+      primaryBtnBuilder;
+  final OutlinedButton Function(
+      BuildContext, QueryDocumentSnapshot<DbAppointment>)? secondaryBtnBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +25,11 @@ class ApptListView extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         itemCount: apptList.length,
         itemBuilder: (ctx, idx) {
-          final appt = apptList[idx].data();
-          final visitReasonIsEmpty =
-              (appt.visitReason == null || appt.visitReason!.trim().isEmpty);
-          final profile = appt.userProfile;
-          final effectiveAt = appt.effectiveAt.toDate();
+          final apptData = apptList[idx].data();
+          final visitReasonIsEmpty = (apptData.visitReason == null ||
+              apptData.visitReason!.trim().isEmpty);
+          final profile = apptData.userProfile;
+          final effectiveAt = apptData.effectiveAt.toDate();
           final month = DateFormat.yMMMMd().format(effectiveAt).substring(0, 3);
           final dayOfWeek =
               DateFormat.yMMMMEEEEd().format(effectiveAt).substring(0, 3);
@@ -81,7 +83,7 @@ class ApptListView extends StatelessWidget {
                                             Icons.home_repair_service_outlined),
                                       ),
                                     ),
-                                    TextSpan(text: appt.serviceName),
+                                    TextSpan(text: apptData.serviceName),
                                   ],
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -181,7 +183,7 @@ class ApptListView extends StatelessWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
                             scrollable: true,
-                            content: Text(appt.visitReason!),
+                            content: Text(apptData.visitReason!),
                             actionsAlignment: MainAxisAlignment.center,
                             actions: [
                               OutlinedButton(
@@ -199,9 +201,9 @@ class ApptListView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       if (secondaryBtnBuilder != null)
-                        secondaryBtnBuilder!(context, idx),
+                        secondaryBtnBuilder!(context, apptList[idx]),
                       const SizedBox(width: 8),
-                      primaryBtnBuilder(context, idx),
+                      primaryBtnBuilder(context, apptList[idx]),
                       const SizedBox(width: 8),
                     ],
                   )

@@ -85,17 +85,60 @@ class _EventCalendarScreenState extends State<EventCalendarScreen> {
             ],
           ),
         ),
-        body: TabBarView(children: [
-          AppointmentListTabView(
-            queryStream: upcomingStream!,
-            secondaryBtnBuilder: (_, idx) => OutlinedButton(
-              child: const Text('Cancel'),
-              onPressed: () {},
+        body: TabBarView(
+          children: [
+            AppointmentListTabView(
+              queryStream: upcomingStream!,
+              secondaryBtnBuilder: (_, apptSnapshot) => OutlinedButton(
+                child: const Text('Cancel'),
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text('Cancel appointment?'),
+                    content: Text(
+                        'This action cannot be undone. You will be navigated to the chat screen to explain to the customer why this appointment is canceled.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('No'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final apptData = apptSnapshot.data();
+                          await apptSnapshot.reference.update({
+                            'status': describeEnum(ApptStatus.canceled),
+                          });
+                          Navigator.pop(context);
+                          final roomSnapshot = await _findChatRoomForBoth(
+                            placeId: apptData.placeId,
+                            customerId: apptData.accountId,
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ChatScreen(
+                                chatRoomId: roomSnapshot.docs.isNotEmpty
+                                    ? roomSnapshot.docs[0].id
+                                    : null,
+                                placeId: apptData.placeId,
+                                placeName: apptData.placeName,
+                                customerId: apptData.accountId,
+                                customerName: apptData.userProfile.fullname,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text('Yes, definitely'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-          AppointmentListTabView(queryStream: pastStream!),
-          AppointmentListTabView(queryStream: canceledStream!),
-        ]),
+            AppointmentListTabView(queryStream: pastStream!),
+            AppointmentListTabView(queryStream: canceledStream!),
+          ],
+        ),
         bottomNavigationBar: CustomBottomNavBar(),
       ),
     );
@@ -110,7 +153,8 @@ class AppointmentListTabView extends StatelessWidget {
   }) : super(key: key);
 
   final Stream<QuerySnapshot<DbAppointment>> queryStream;
-  final OutlinedButton Function(BuildContext, int)? secondaryBtnBuilder;
+  final OutlinedButton Function(
+      BuildContext, QueryDocumentSnapshot<DbAppointment>)? secondaryBtnBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -127,26 +171,26 @@ class AppointmentListTabView extends StatelessWidget {
           if (apptList.isEmpty) return Text('No appointments found.');
           return ApptListView(
             apptList: apptList,
-            primaryBtnBuilder: (_, index) => ElevatedButton.icon(
+            primaryBtnBuilder: (_, apptSnapshot) => ElevatedButton.icon(
               icon: const Icon(Icons.chat_bubble_outline),
               label: const Text('Chat'),
               onPressed: () async {
-                final appt = apptList[index].data();
-                final snapshot = await FirebaseFirestore.instance
-                    .collection('chat_rooms')
-                    .where('place_id', isEqualTo: appt.placeId)
-                    .where('customer_id', isEqualTo: appt.accountId)
-                    .get();
+                final apptData = apptSnapshot.data();
+                final roomSnapshot = await _findChatRoomForBoth(
+                  placeId: apptData.placeId,
+                  customerId: apptData.accountId,
+                );
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => ChatScreen(
-                      chatRoomId:
-                          snapshot.docs.isNotEmpty ? snapshot.docs[0].id : null,
-                      placeId: appt.placeId,
-                      placeName: appt.placeName,
-                      customerId: appt.accountId,
-                      customerName: appt.userProfile.fullname,
+                      chatRoomId: roomSnapshot.docs.isNotEmpty
+                          ? roomSnapshot.docs[0].id
+                          : null,
+                      placeId: apptData.placeId,
+                      placeName: apptData.placeName,
+                      customerId: apptData.accountId,
+                      customerName: apptData.userProfile.fullname,
                     ),
                   ),
                 );
@@ -158,4 +202,15 @@ class AppointmentListTabView extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<QuerySnapshot<Map<String, dynamic>>> _findChatRoomForBoth({
+  required String placeId,
+  required String customerId,
+}) {
+  return FirebaseFirestore.instance
+      .collection('chat_rooms')
+      .where('place_id', isEqualTo: placeId)
+      .where('customer_id', isEqualTo: customerId)
+      .get();
 }
