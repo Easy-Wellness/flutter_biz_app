@@ -7,6 +7,10 @@ void showCustomTimePicker({
   int minuteInterval = 5,
   bool use24hFormat = false,
 
+  /// Whether the time at midnight (12:00 AM in the UI picker) should be 0h or
+  /// 86400 seconds (24h)
+  bool midnightIsZero = true,
+
   /// The number of seconds from midnight 12:00 AM
   required void Function(int) onTimeChanged,
 }) async {
@@ -41,8 +45,9 @@ void showCustomTimePicker({
                   mode: CupertinoDatePickerMode.time,
                   minuteInterval: minuteInterval,
                   use24hFormat: use24hFormat,
-                  initialDateTime:
-                      today.add(Duration(seconds: initialTimeInSecs)),
+                  initialDateTime: today.add(Duration(
+                    seconds: initialTimeInSecs == 86400 ? 0 : initialTimeInSecs,
+                  )),
                   onDateTimeChanged: (newDateTime) {
                     final timeInSecs = (newDateTime.millisecondsSinceEpoch -
                             today.millisecondsSinceEpoch) ~/
@@ -50,7 +55,9 @@ void showCustomTimePicker({
 
                     /// If it is 12:00 AM midnight, the time in seconds will be
                     /// 24 hours * 3600 seconds
-                    onTimeChanged(timeInSecs == 0 ? 86400 : timeInSecs);
+                    onTimeChanged(
+                      (timeInSecs == 0 && !midnightIsZero) ? 86400 : timeInSecs,
+                    );
                   },
                 ),
               ),

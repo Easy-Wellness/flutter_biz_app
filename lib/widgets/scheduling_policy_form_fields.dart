@@ -52,6 +52,9 @@ class _SchedulingPolicyFormFieldsState
       children: [
         FormField<int>(
           initialValue: widget.initialMinuteIncrements ?? 15,
+          validator: (value) {
+            if (value == null || value == 0) return 'This field is required';
+          },
           onSaved: widget.onMinuteIncrementsSaved,
           // field's value is always in the unit of minutes
           builder: (field) {

@@ -322,6 +322,7 @@ class _TimeIntervalRowForSpecificDayState
                     showCustomTimePicker(
                       context: context,
                       initialTimeInSecs: end!,
+                      midnightIsZero: false,
                       onTimeChanged: (time) => setState(() => end = time),
                     );
                   }
