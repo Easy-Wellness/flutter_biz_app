@@ -320,7 +320,7 @@ class _ServiceFormFieldsState extends State<ServiceFormFields> {
             ),
             minLines: 3,
             maxLines: null,
-            maxLength: 600,
+            maxLength: 800,
           ),
           Container(
             width: double.infinity,
