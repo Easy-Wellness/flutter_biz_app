@@ -24,9 +24,15 @@ class DbNearbyService {
 
   final String specialty;
   final String address;
-  final String description;
+
+  /// This field is never null, but marked as null to fix the weird error:
+  /// type 'Null' is not a subtype of type 'String' in type cast.
+  final String? description;
   final double rating;
-  final int duration;
+
+  /// This field is never null, but marked as null to fix the weird error:
+  /// type 'Null' is not a subtype of type 'int' in type cast
+  final int? duration;
 
   /// The minutes between two bookings. The value is always <=24 hours
   /// (= 1440 mins).
@@ -47,8 +53,10 @@ class DbNearbyService {
   @JsonKey(name: 'service_name', defaultValue: '')
   final String serviceName;
 
+  /// This field is never null, but marked as null to fix the weird error:
+  /// type 'Null' is not a subtype of type 'Map<dynamic, dynamic>' in type cast.
   @JsonKey(name: 'price_tag')
-  final PriceTag priceTag;
+  final PriceTag? priceTag;
 
   @JsonKey(name: 'geo_position')
   final GeoPosition geoPosition;

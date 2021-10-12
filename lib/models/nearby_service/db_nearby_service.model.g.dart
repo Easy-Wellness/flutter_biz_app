@@ -12,13 +12,15 @@ DbNearbyService _$DbNearbyServiceFromJson(Map json) {
     ratingsTotal: json['ratings_total'] as int,
     specialty: json['specialty'] as String,
     serviceName: json['service_name'] as String? ?? '',
-    priceTag:
-        PriceTag.fromJson(Map<String, dynamic>.from(json['price_tag'] as Map)),
+    priceTag: json['price_tag'] == null
+        ? null
+        : PriceTag.fromJson(
+            Map<String, dynamic>.from(json['price_tag'] as Map)),
     placeName: json['place_name'] as String? ?? '',
     placeId: json['place_id'] as String? ?? '',
     address: json['address'] as String,
-    description: json['description'] as String,
-    duration: json['duration'] as int,
+    description: json['description'] as String?,
+    duration: json['duration'] as int?,
     geoPosition: GeoPosition.fromJson(
         Map<String, dynamic>.from(json['geo_position'] as Map)),
     minuteIncrements: json['minute_increments'] as int?,
@@ -39,7 +41,7 @@ Map<String, dynamic> _$DbNearbyServiceToJson(DbNearbyService instance) =>
       'max_lead_days': instance.maxLeadDays,
       'ratings_total': instance.ratingsTotal,
       'service_name': instance.serviceName,
-      'price_tag': instance.priceTag.toJson(),
+      'price_tag': instance.priceTag?.toJson(),
       'geo_position': instance.geoPosition.toJson(),
       'place_id': instance.placeId,
       'place_name': instance.placeName,
