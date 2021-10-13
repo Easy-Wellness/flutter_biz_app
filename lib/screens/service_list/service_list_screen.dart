@@ -10,6 +10,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 
+import 'review_list_screen.dart';
 import 'save_service_screen.dart';
 
 class ServiceListScreen extends StatelessWidget {
@@ -196,13 +197,13 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                     padding: const EdgeInsets.only(top: 8),
                     itemCount: servicesToShow!.length,
                     itemBuilder: (_, idx) {
-                      final service = servicesToShow![idx].data();
+                      final serviceData = servicesToShow![idx].data();
                       return ListTile(
                         key: ValueKey<String>(servicesToShow![idx].id),
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 8),
                         title: Text(
-                          service.serviceName,
+                          serviceData.serviceName,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
@@ -213,7 +214,7 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                             Row(
                               children: [
                                 RatingBarIndicator(
-                                  rating: service.rating,
+                                  rating: serviceData.rating,
                                   itemCount: 5,
                                   itemSize: 10,
                                   itemBuilder: (_, index) => const Icon(
@@ -222,7 +223,7 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                                   ),
                                 ),
                                 Text(
-                                    ' (${service.rating == 0 ? 'No rating' : service.rating})'),
+                                    ' (${serviceData.rating == 0 ? 'No rating' : serviceData.rating})'),
                               ],
                             ),
                             RichText(
@@ -236,11 +237,12 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                                         width: 24,
                                         height: 24,
                                         child: SvgPicture.asset(
-                                            'assets/icons/specialty_${service.specialty.snakeCase}_icon.svg'),
+                                            'assets/icons/specialty_${serviceData.specialty.snakeCase}_icon.svg'),
                                       ),
                                     ),
                                   ),
-                                  TextSpan(text: service.specialty.headerCase),
+                                  TextSpan(
+                                      text: serviceData.specialty.headerCase),
                                 ],
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -258,10 +260,18 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                                   MaterialPageRoute(
                                     builder: (_) => SaveServiceScreen(
                                       serviceId: servicesToShow![idx].id,
-                                      initialData: service,
+                                      initialData: serviceData,
                                     ),
                                   ),
                                 );
+                                break;
+                              case MoreOption.seeReviews:
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => ReviewListScreen(
+                                    placeId: serviceData.placeId,
+                                    serviceId: servicesToShow![idx].id,
+                                  ),
+                                ));
                                 break;
                               case MoreOption.remove:
                                 // showDialog(
@@ -294,17 +304,16 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                                 //   ),
                                 // );
                                 break;
-                              case MoreOption.seeReviews:
                             }
                           },
                           itemBuilder: (_) => [
                             PopupMenuItem(
                               value: MoreOption.edit,
-                              child: Text('View & Edit'),
+                              child: const Text('View & Edit'),
                             ),
                             PopupMenuItem(
                               value: MoreOption.seeReviews,
-                              child: Text('See all reviews'),
+                              child: const Text('See all reviews'),
                             ),
                             // PopupMenuItem(
                             //   value: MoreOption.remove,
@@ -322,6 +331,8 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
 
   @override
   void didUpdateWidget(covariant SearchableServiceListView oldWidget) {
+    /// Avoid unexpected behavior when the service list is updated either due
+    /// to setState() or due to real-time updates from StreamBuilder()
     servicesToShow = widget.services;
     super.didUpdateWidget(oldWidget);
   }
