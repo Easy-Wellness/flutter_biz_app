@@ -61,8 +61,12 @@ Future<void> seedPlacesAndServices() async {
     await Future.wait(
       specialties.mapIndexed(
         (specialtyIndex, specialty) async {
+          final ratingPoints = List.generate(
+            nReviews,
+            (_) => _getRandomIntInRange(randomSource, 1, 5).toDouble(),
+          );
           final serviceRef = await servicesRef.add(DbNearbyService(
-            rating: place.rating,
+            rating: ratingPoints.average,
             ratingsTotal: nReviews,
             duration: _getRandomIntInRange(randomSource, 15, 180),
             description:
@@ -83,7 +87,7 @@ Future<void> seedPlacesAndServices() async {
           ));
           await Future.wait(List.generate(
             nReviews,
-            (_) => serviceRef
+            (reviewIndex) => serviceRef
                 .collection('reviews')
                 .withConverter<DbReview>(
                   fromFirestore: (snapshot, _) =>
@@ -95,7 +99,7 @@ Future<void> seedPlacesAndServices() async {
                   creatorName: _fullnames[randomSource.nextInt(160)],
                   placeId: placeRef.id,
                   serviceId: serviceRef.id,
-                  rating: _getRandomIntInRange(randomSource, 1, 5).toDouble(),
+                  rating: ratingPoints[reviewIndex],
                   text: _fakeReviews[randomSource.nextInt(160)],
                   createdAt: Timestamp.fromDate(
                     DateTime.fromMillisecondsSinceEpoch(
