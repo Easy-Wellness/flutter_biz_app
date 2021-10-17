@@ -101,9 +101,13 @@ class SettingListScreen extends StatelessWidget {
             // ),
             // const Divider(indent: 10, endIndent: 10, thickness: 1),
             TextButton.icon(
-              onPressed: () => FirebaseAuth.instance.signOut(),
-              icon: Icon(Icons.logout_outlined),
-              label: Text('Sign Out'),
+              onPressed: () {
+                Provider.of<BusinessPlaceIdNotifier>(context, listen: false)
+                    .businessPlaceId = null;
+                FirebaseAuth.instance.signOut();
+              },
+              icon: const Icon(Icons.logout_outlined),
+              label: const Text('Sign Out'),
               style:
                   TextButton.styleFrom(primary: Theme.of(context).errorColor),
             ),

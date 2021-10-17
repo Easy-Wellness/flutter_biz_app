@@ -1,6 +1,5 @@
 import 'package:easy_wellness_biz_app/services/auth_service/login_with_facebook.service.dart';
 import 'package:easy_wellness_biz_app/services/auth_service/login_with_google.service.dart';
-import 'package:easy_wellness_biz_app/widgets/or_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -47,25 +46,25 @@ class _BodyState extends State<Body> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ...[
-            TextField(
-              controller: _emailInpController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                hintText: 'Sign in with email link',
-                prefixIcon: const Icon(Icons.email),
-                suffixIcon: _isEmpty
-                    ? null
-                    : IconButton(
-                        onPressed: () => _emailInpController.clear(),
-                        icon: const Icon(Icons.clear),
-                      ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _isEmpty ? null : () => {},
-              child: Text('Next'),
-            ),
-            OrDivider(),
+            // TextField(
+            //   controller: _emailInpController,
+            //   keyboardType: TextInputType.emailAddress,
+            //   decoration: InputDecoration(
+            //     hintText: 'Sign in with email link',
+            //     prefixIcon: const Icon(Icons.email),
+            //     suffixIcon: _isEmpty
+            //         ? null
+            //         : IconButton(
+            //             onPressed: () => _emailInpController.clear(),
+            //             icon: const Icon(Icons.clear),
+            //           ),
+            //   ),
+            // ),
+            // ElevatedButton(
+            //   onPressed: _isEmpty ? null : () => {},
+            //   child: Text('Next'),
+            // ),
+            // OrDivider(),
             ElevatedButton.icon(
               onPressed: () => loginWithGoogle(),
               style: ElevatedButton.styleFrom(primary: Colors.white60),

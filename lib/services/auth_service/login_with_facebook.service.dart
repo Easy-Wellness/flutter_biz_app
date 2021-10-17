@@ -27,13 +27,12 @@ void authExceptionHandler(FirebaseAuthException err, BuildContext context) {
         return CupertinoAlertDialog(
           title: Text(
               'The email address "${err.email}" associated with your Facebook account already exists'),
-          content: Text(
-              'A link has been sent to this email, please use this link to merge your Facebook account'),
+          content: Text('Please use another Facebook account.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
-                'I check my email right away',
+                'Okay',
                 style: TextStyle(color: Colors.blue),
               ),
             )
