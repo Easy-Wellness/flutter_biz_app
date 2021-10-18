@@ -12,7 +12,7 @@ import 'screens/setting_list/setting_list_screen.dart';
 import 'theme.dart';
 import 'utils/navigate_to_root_screen.dart';
 
-final _useEmulators = false;
+const _useFirebaseEmulatorSuite = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,7 @@ void main() async {
       // ignore: invalid_return_type_for_catch_error
       .catchError((_) => print('Cannot initialize Firebase'));
 
-  if (_useEmulators) {
+  if (_useFirebaseEmulatorSuite) {
     await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
 
     /// See https://firebase.flutter.dev/docs/firestore/usage#emulator-usage
