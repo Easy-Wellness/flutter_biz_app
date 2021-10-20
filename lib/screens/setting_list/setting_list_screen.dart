@@ -129,30 +129,31 @@ class ShortBusinessInfo extends StatefulWidget {
 }
 
 class _ShortBusinessInfoState extends State<ShortBusinessInfo> {
-  Future<DocumentSnapshot<DbPlace>>? docSnapshot;
+  Stream<DocumentSnapshot<DbPlace>>? docStream;
 
   @override
   void initState() {
     super.initState();
     if (widget.placeId == null) return;
-    docSnapshot = FirebaseFirestore.instance
+    docStream = FirebaseFirestore.instance
         .collection('places')
         .doc(widget.placeId)
         .withConverter<DbPlace>(
           fromFirestore: (snapshot, _) => DbPlace.fromJson(snapshot.data()!),
           toFirestore: (place, _) => place.toJson(),
         )
-        .get();
+        .snapshots();
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: FutureBuilder<DocumentSnapshot<DbPlace>>(
-        future: docSnapshot,
+      child: StreamBuilder<DocumentSnapshot<DbPlace>>(
+        stream: docStream,
         builder: (_, snapshot) {
           if (snapshot.hasError) return const Text('Something went wrong 😞');
-          if (!snapshot.hasData) return const LinearProgressIndicator();
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return const LinearProgressIndicator();
           final place = snapshot.data!.data()!;
           return Column(
             children: [
