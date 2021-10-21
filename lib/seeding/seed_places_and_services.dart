@@ -68,7 +68,7 @@ Future<void> seedPlacesAndServices() async {
           final serviceRef = await servicesRef.add(DbNearbyService(
             rating: ratingPoints.average,
             ratingsTotal: nReviews,
-            duration: _getRandomIntInRange(randomSource, 15, 180),
+            duration: (_getRandomIntInRange(randomSource, 15, 180) ~/ 15) * 15,
             description:
                 'Half section of Italian or French bread with garlic butter, containing ham, provel or provolone cheese, topped with paprika, then toasted. Doner kebab is meat cooked on a vertical spit, normally veal or beef but also may be a mixture of these with lamb, and sometimes chicken that may be served wrapped in a flatbread such as lavash or pita or as a sandwich. Slices of cheese (typically Cheddar) and pickle (a sweet, vinegary chutney with the most popular brand being Branston), sandwiched between two slices of bread.',
             specialty: specialty,
