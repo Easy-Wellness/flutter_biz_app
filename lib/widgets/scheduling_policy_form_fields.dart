@@ -9,7 +9,7 @@ class SchedulingPolicyFormFields extends StatefulWidget {
     required this.formValidationManager,
     this.spacing = 32,
     this.border = const OutlineInputBorder(),
-    this.initialMinuteIncrements = 15,
+    this.initialMinuteIncrements = 30,
     this.initialMinLeadHours = 24,
     this.initialMaxLeadDays = 365,
     required this.onMinuteIncrementsSaved,
@@ -41,8 +41,8 @@ class _SchedulingPolicyFormFieldsState
 
   @override
   void initState() {
-    minLeadController.text = widget.initialMinLeadHours?.toString() ?? '';
-    maxLeadController.text = widget.initialMaxLeadDays?.toString() ?? '';
+    minLeadController.text = widget.initialMinLeadHours?.toString() ?? '24';
+    maxLeadController.text = widget.initialMaxLeadDays?.toString() ?? '365';
     super.initState();
   }
 
@@ -51,7 +51,7 @@ class _SchedulingPolicyFormFieldsState
     return Column(
       children: [
         FormField<int>(
-          initialValue: widget.initialMinuteIncrements ?? 15,
+          initialValue: widget.initialMinuteIncrements ?? 30,
           validator: (value) {
             if (value == null || value == 0) return 'This field is required';
           },
@@ -94,7 +94,7 @@ class _SchedulingPolicyFormFieldsState
         ),
         SizedBox(height: widget.spacing),
         FormField<int>(
-          initialValue: widget.initialMinLeadHours,
+          initialValue: widget.initialMinLeadHours ?? 24,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: widget.formValidationManager.wrapValidator('minLeadTime',
               (value) {
@@ -123,7 +123,7 @@ class _SchedulingPolicyFormFieldsState
             decoration: InputDecoration(
               border: widget.border,
               label: const Text('Minimum lead time'),
-              suffix: Text('hour(s)'),
+              suffix: const Text('hour(s)'),
               errorText: field.errorText,
               helperText:
                   'Customers must book, reschedule, or cancel appointments more than ${field.value} hour(s) in advance.',
@@ -133,7 +133,7 @@ class _SchedulingPolicyFormFieldsState
         ),
         SizedBox(height: widget.spacing),
         FormField<int>(
-          initialValue: widget.initialMaxLeadDays,
+          initialValue: widget.initialMaxLeadDays ?? 365,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: widget.formValidationManager.wrapValidator('maxLeadTime',
               (value) {
@@ -158,7 +158,7 @@ class _SchedulingPolicyFormFieldsState
             decoration: InputDecoration(
               border: widget.border,
               label: const Text('Maximum lead time'),
-              suffix: Text('day(s)'),
+              suffix: const Text('day(s)'),
               errorText: field.errorText,
               helperText:
                   'Customers will not be able to book over ${field.value} day(s) in advance.',

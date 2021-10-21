@@ -195,7 +195,7 @@ class _ServiceFormFieldsState extends State<ServiceFormFields> {
             },
           ),
           FormField<int>(
-            initialValue: initialData?.duration,
+            initialValue: initialData?.duration ?? 15,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
               if (value == null || value == 0) return 'Duration is required';

@@ -255,6 +255,7 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                           icon: const Icon(Icons.more_horiz),
                           offset: const Offset(0, 40),
                           onSelected: (option) {
+                            FocusManager.instance.primaryFocus?.unfocus();
                             switch (option) {
                               case MoreOption.edit:
                                 Navigator.of(context).push(
