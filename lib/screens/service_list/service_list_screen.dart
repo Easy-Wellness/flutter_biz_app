@@ -224,7 +224,7 @@ class _SearchableServiceListViewState extends State<SearchableServiceListView> {
                                   ),
                                 ),
                                 Text(
-                                    ' (${serviceData.rating == 0 ? 'No rating' : serviceData.rating})'),
+                                    ' ${serviceData.rating == 0 ? 'No review' : '${serviceData.rating} (${serviceData.ratingsTotal} Reviews)'}'),
                               ],
                             ),
                             RichText(

@@ -27,7 +27,7 @@ class SetPlaceIdAppStateScreen extends StatelessWidget {
           child: FloatingActionButton(
             onPressed: () => Navigator.pushNamed(
                 context, CreateBusinessPlaceScreen.routeName),
-            child: Icon(Icons.add_business_outlined),
+            child: const Icon(Icons.add_business_outlined),
           ),
         ),
       ),
