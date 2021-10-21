@@ -63,6 +63,7 @@ class _BodyState extends State<Body> {
         .collection('places')
         .doc(widget.placeId)
         .collection('services')
+        .orderBy('rating')
         .withConverter<DbNearbyService>(
           fromFirestore: (snapshot, _) =>
               DbNearbyService.fromJson(snapshot.data()!),
