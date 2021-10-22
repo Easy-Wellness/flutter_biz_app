@@ -1,14 +1,10 @@
 import 'package:easy_wellness_biz_app/formatters/phone_input_formatter.dart';
+import 'package:easy_wellness_biz_app/utils/check_if_email_is_valid.dart';
 import 'package:easy_wellness_biz_app/utils/form_validation_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'clearable_text_form_field.dart';
 import 'pick_location_screen.dart';
-
-final _emailRegex = RegExp(
-  r'''^(([^<>()\[\]\\.,;:\s-@#$!%^&*+=_/`?{}|'"]+(\.[^<>()\[\]\\.,;:\s-@_!#$%^&*()=+/`?{}|'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$''',
-  caseSensitive: false,
-);
 
 class BasicBusinessInfoFormFields extends StatelessWidget {
   BasicBusinessInfoFormFields({
@@ -97,13 +93,8 @@ class BasicBusinessInfoFormFields extends StatelessWidget {
           ),
           ClearableTextFormField(
             initialValue: initialEmail,
-            validator: formValidationManager.wrapValidator('email', (value) {
-              if (value == null || value.trim().isEmpty)
-                return 'Email is required';
-              if (value.trim().length < 5 || value.trim().length > 50)
-                return 'Email must contain between 5 and 50 characters';
-              if (!_emailRegex.hasMatch(value)) return 'Email is not valid';
-            }),
+            validator: formValidationManager.wrapValidator(
+                'email', checkIfEmailIsValid),
             onSaved: onEmailSaved,
             focusNode: formValidationManager.getFocusNodeForField('email'),
             autovalidateMode: AutovalidateMode.onUserInteraction,
