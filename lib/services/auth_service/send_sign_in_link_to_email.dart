@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> loginWithEmailAndLink(String email) {
+Future<void> sendSignInLinkToEmail(String email) {
   return FirebaseAuth.instance.sendSignInLinkToEmail(
     email: email,
     actionCodeSettings: ActionCodeSettings(
