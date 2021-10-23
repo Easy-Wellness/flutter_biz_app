@@ -3,6 +3,7 @@ import 'package:easy_wellness_biz_app/models/place/db_place.model.dart';
 import 'package:easy_wellness_biz_app/notifiers/business_place_id_notifier.dart';
 import 'package:easy_wellness_biz_app/utils/navigate_to_root_screen.dart';
 import 'package:easy_wellness_biz_app/utils/remove_diacritics_from_string.dart';
+import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -55,6 +56,15 @@ class _BodyState extends State<Body> {
         toFirestore: (place, _) => place.toJson(),
       )
       .get();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) => showCustomSnackBar(context, 'Successfully signed in '),
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

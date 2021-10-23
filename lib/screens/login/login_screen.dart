@@ -1,6 +1,6 @@
-import 'package:easy_wellness_biz_app/services/auth_service/login_with_email_and_link.dart';
 import 'package:easy_wellness_biz_app/services/auth_service/login_with_facebook.service.dart';
 import 'package:easy_wellness_biz_app/services/auth_service/login_with_google.service.dart';
+import 'package:easy_wellness_biz_app/services/auth_service/send_sign_in_link_to_email.dart';
 import 'package:easy_wellness_biz_app/utils/check_if_email_is_valid.dart';
 import 'package:easy_wellness_biz_app/utils/show_custom_snack_bar.dart';
 import 'package:easy_wellness_biz_app/widgets/or_divider.dart';
@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:open_mail_app/open_mail_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';
@@ -83,34 +84,41 @@ class _BodyState extends State<Body> {
                       final emailErr = checkIfEmailIsValid(email);
                       if (emailErr != null)
                         return showCustomSnackBar(context, emailErr);
-                      loginWithEmailAndLink(email).catchError((e) {
+
+                      sendSignInLinkToEmail(email).catchError((e) {
                         print(e);
                         showCustomSnackBar(context, 'Sending email failed');
-                      }).then((_) => showDialog(
-                            context: context,
-                            builder: (ctx) {
-                              return CupertinoAlertDialog(
-                                title: Text('An email has been sent to $email'),
-                                content: const Text(
-                                    'Please tap the link that we sent to your email to sign in.'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                      OpenMailApp.openMailApp();
-                                    },
-                                    child: Text(
-                                      'Okay',
-                                      style: TextStyle(
-                                          color: Colors.blueGrey[700]!),
-                                    ),
-                                  )
-                                ],
-                              );
-                            },
-                          ));
+                      }).then((_) {
+                        SharedPreferences.getInstance().then(
+                          (prefs) =>
+                              prefs.setString('emailToAuthViaLink', email),
+                        );
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return CupertinoAlertDialog(
+                              title: Text('An email has been sent to $email'),
+                              content: const Text(
+                                  'Please tap the link that we sent to your email to sign in.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    OpenMailApp.openMailApp();
+                                  },
+                                  child: Text(
+                                    'Okay',
+                                    style:
+                                        TextStyle(color: Colors.blueGrey[700]!),
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      });
                     },
               label: const Text('Sign in with email link'),
             ),
