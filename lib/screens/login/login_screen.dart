@@ -17,11 +17,25 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Login'),
+      child: Container(
+        color: Colors.white,
+        child: Stack(
+          children: [
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: SvgPicture.asset("assets/icons/waves_bottom.svg"),
+            ),
+            Scaffold(
+              /// See the white container with waves at the bottom
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                title: Text('Login'),
+              ),
+              body: Body(),
+            ),
+          ],
         ),
-        body: Body(),
       ),
     );
   }
@@ -47,12 +61,18 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ...[
+    final size = MediaQuery.of(context).size;
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SvgPicture.asset(
+              "assets/icons/login.svg",
+              height: size.height * 0.2,
+            ),
+            const SizedBox(height: 8),
             Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: ThemeData()
@@ -74,6 +94,7 @@ class _BodyState extends State<Body> {
                 ),
               ),
             ),
+            const SizedBox(height: 8),
             ElevatedButton.icon(
               icon: const Icon(Icons.insert_link),
               style: ElevatedButton.styleFrom(primary: Colors.blueGrey[700]!),
@@ -135,6 +156,7 @@ class _BodyState extends State<Body> {
                 style: TextStyle(color: Colors.black),
               ),
             ),
+            const SizedBox(height: 8),
             ElevatedButton.icon(
               onPressed: () => loginWithFacebook(context),
               style: ElevatedButton.styleFrom(primary: Colors.blue),
@@ -145,15 +167,8 @@ class _BodyState extends State<Body> {
               ),
               label: Text('Continue with Facebook'),
             ),
-          ].expand(
-            (widget) => [
-              widget,
-              const SizedBox(
-                height: 8,
-              )
-            ],
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
