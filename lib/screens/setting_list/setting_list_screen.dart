@@ -14,6 +14,7 @@ class SettingListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
       body: Consumer<BusinessPlaceIdNotifier>(
@@ -110,6 +111,11 @@ class SettingListScreen extends StatelessWidget {
               style:
                   TextButton.styleFrom(primary: Theme.of(context).errorColor),
             ),
+            const SizedBox(height: 32),
+            Image.asset(
+              "assets/images/business_mgmt.jpg",
+              width: size.width * 0.4,
+            )
           ],
         ),
       ),
